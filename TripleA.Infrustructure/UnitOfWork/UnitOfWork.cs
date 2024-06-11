@@ -1,6 +1,6 @@
 ﻿using TripleA.Infrustructure.Context;
 
-namespace TripleA.Infrustructure.UnitOfWork
+namespace TripleA.Infrustructure.unitOfWork
 {
     public class UnitOfWork : IUnitOfWork
     {
