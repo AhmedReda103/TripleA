@@ -1,4 +1,6 @@
 ﻿using Microsoft.Extensions.DependencyInjection;
+using TripleA.Service.Abstracts;
+using TripleA.Service.implementations;
 
 namespace TripleA.Service
 {
@@ -6,6 +8,7 @@ namespace TripleA.Service
     {
         public static IServiceCollection AddServiceDependencies(this IServiceCollection services)
         {
+            services.AddTransient<IApplicationUserService, ApplicationUserService>();
 
 
             return services;
