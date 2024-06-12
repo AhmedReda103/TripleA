@@ -3,6 +3,7 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using TripleA.Infrustructure.Context;
 
@@ -11,9 +12,11 @@ using TripleA.Infrustructure.Context;
 namespace TripleA.Infrustructure.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    partial class ApplicationDbContextModelSnapshot : ModelSnapshot
+    [Migration("20240612100047_CreateAnswersTable")]
+    partial class CreateAnswersTable
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -175,15 +178,10 @@ namespace TripleA.Infrustructure.Migrations
                     b.Property<string>("Image")
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<int?>("QuestionId")
-                        .HasColumnType("int");
-
                     b.Property<int?>("Votes")
                         .HasColumnType("int");
 
                     b.HasKey("Id");
-
-                    b.HasIndex("QuestionId");
 
                     b.ToTable("Answers");
                 });
@@ -202,30 +200,6 @@ namespace TripleA.Infrustructure.Migrations
                     b.HasKey("Id");
 
                     b.ToTable("Categories");
-                });
-
-            modelBuilder.Entity("TripleA.Data.Entities.Comment", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
-
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
-
-                    b.Property<int?>("AnswerId")
-                        .HasColumnType("int");
-
-                    b.Property<string>("Content")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<DateTime?>("CreatedIn")
-                        .HasColumnType("datetime2");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("AnswerId");
-
-                    b.ToTable("Comments");
                 });
 
             modelBuilder.Entity("TripleA.Data.Entities.Identity.User", b =>
@@ -301,9 +275,6 @@ namespace TripleA.Infrustructure.Migrations
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
 
-                    b.Property<int?>("CategoryId")
-                        .HasColumnType("int");
-
                     b.Property<DateTime?>("CreatedIn")
                         .HasColumnType("datetime2");
 
@@ -317,8 +288,6 @@ namespace TripleA.Infrustructure.Migrations
                         .HasColumnType("nvarchar(max)");
 
                     b.HasKey("Id");
-
-                    b.HasIndex("CategoryId");
 
                     b.ToTable("Questions");
                 });
@@ -372,48 +341,6 @@ namespace TripleA.Infrustructure.Migrations
                         .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
-                });
-
-            modelBuilder.Entity("TripleA.Data.Entities.Answer", b =>
-                {
-                    b.HasOne("TripleA.Data.Entities.Question", "Question")
-                        .WithMany("Answers")
-                        .HasForeignKey("QuestionId");
-
-                    b.Navigation("Question");
-                });
-
-            modelBuilder.Entity("TripleA.Data.Entities.Comment", b =>
-                {
-                    b.HasOne("TripleA.Data.Entities.Answer", "Answer")
-                        .WithMany("Comments")
-                        .HasForeignKey("AnswerId");
-
-                    b.Navigation("Answer");
-                });
-
-            modelBuilder.Entity("TripleA.Data.Entities.Question", b =>
-                {
-                    b.HasOne("TripleA.Data.Entities.Category", "Category")
-                        .WithMany("Questions")
-                        .HasForeignKey("CategoryId");
-
-                    b.Navigation("Category");
-                });
-
-            modelBuilder.Entity("TripleA.Data.Entities.Answer", b =>
-                {
-                    b.Navigation("Comments");
-                });
-
-            modelBuilder.Entity("TripleA.Data.Entities.Category", b =>
-                {
-                    b.Navigation("Questions");
-                });
-
-            modelBuilder.Entity("TripleA.Data.Entities.Question", b =>
-                {
-                    b.Navigation("Answers");
                 });
 #pragma warning restore 612, 618
         }

@@ -1,5 +1,6 @@
 ﻿using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
+using TripleA.Data.Entities;
 using TripleA.Data.Entities.Identity;
 
 namespace TripleA.Infrustructure.Context
@@ -21,6 +22,11 @@ namespace TripleA.Infrustructure.Context
 
             base.OnModelCreating(modelBuilder);
         }
+
+        public DbSet<Category> Categories { get; set; }
+        public DbSet<Question> Questions { get; set; }
+        public DbSet<Answer> Answers { get; set; }
+        public DbSet<Comment> Comments { get; set; }
 
     }
 }
