@@ -30,6 +30,8 @@
         public const string PasswordNotCorrect = "PasswordNotCorrect";
         public const string TryToRegisterAgain = "TryToRegisterAgain";
         public const string USERROLE = "User";
+        public const string ADMINROLE = "Admin";
+
 
     }
 }
