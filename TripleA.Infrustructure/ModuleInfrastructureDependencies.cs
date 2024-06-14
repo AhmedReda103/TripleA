@@ -1,7 +1,9 @@
 ﻿
 
 using Microsoft.Extensions.DependencyInjection;
+using TripleA.Infrustructure.Abstractions;
 using TripleA.Infrustructure.InfrastructureBases;
+using TripleA.Infrustructure.Repositories;
 using TripleA.Infrustructure.unitOfWork;
 
 namespace TripleA.Infrustructure
@@ -13,6 +15,8 @@ namespace TripleA.Infrustructure
             services.AddTransient(typeof(IGenericRepository<>), typeof(GenericRepository<>));
 
             services.AddTransient<IUnitOfWork, UnitOfWork>();
+
+            services.AddTransient<IQuestionRepository,QuestionRepository>();
 
             return services;
         }

@@ -1,4 +1,3 @@
-
 using Microsoft.EntityFrameworkCore;
 using TripleA.Core;
 using TripleA.Infrustructure;
