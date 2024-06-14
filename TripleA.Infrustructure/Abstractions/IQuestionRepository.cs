@@ -3,10 +3,12 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using TripleA.Data.Entities;
+using TripleA.Infrustructure.InfrastructureBases;
 
 namespace TripleA.Infrustructure.Abstractions
 {
-    internal interface IQuestionRepository
+    public interface IQuestionRepository : IGenericRepository<Question>
     {
     }
 }

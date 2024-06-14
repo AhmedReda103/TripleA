@@ -1,17 +1,22 @@
 ﻿using Microsoft.AspNetCore.Identity;
+using TripleA.Data.Entities;
 using TripleA.Data.Entities.Identity;
+using TripleA.Infrustructure.Abstractions;
 using TripleA.Infrustructure.Context;
+using TripleA.Infrustructure.Repositories;
 
 namespace TripleA.Infrustructure.unitOfWork
 {
-    public class UnitOfWork : IUnitOfWork
+    public class UnitOfWork : IUnitOfWork   //Be aware to intialize every abstraction here into the constractor
     {
         public ApplicationDbContext _context { get; set; }
         public UserManager<User> _userManager { get; }
 
         public RoleManager<IdentityRole> _roleManager { get; }
 
+        public IQuestionRepository Questions { get; }
 
+      
         public UnitOfWork(
             ApplicationDbContext context,
             UserManager<User> userManager,
@@ -21,6 +26,7 @@ namespace TripleA.Infrustructure.unitOfWork
             _context = context;
             _userManager = userManager;
             _roleManager = roleManager;
+            Questions = new QuestionRepository(_context);
         }
 
 
