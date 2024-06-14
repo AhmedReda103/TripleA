@@ -13,6 +13,7 @@ namespace TripleA.Infrustructure.unitOfWork
         public RoleManager<IdentityRole> _roleManager { get; }
 
         public IQuestionRepository Questions { get; }
+        public IAnswerRepository Answers { get; }
         ApplicationDbContext _context { get; }
 
         Task SaveChangesAsync();

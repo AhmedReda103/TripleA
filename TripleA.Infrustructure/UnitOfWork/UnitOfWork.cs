@@ -16,7 +16,8 @@ namespace TripleA.Infrustructure.unitOfWork
 
         public IQuestionRepository Questions { get; }
 
-      
+        public IAnswerRepository Answers { get; }
+
         public UnitOfWork(
             ApplicationDbContext context,
             UserManager<User> userManager,
@@ -27,6 +28,7 @@ namespace TripleA.Infrustructure.unitOfWork
             _userManager = userManager;
             _roleManager = roleManager;
             Questions = new QuestionRepository(_context);
+            Answers = new AnswerRepository(_context);
         }
 
 
