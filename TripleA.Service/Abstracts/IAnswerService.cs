@@ -3,10 +3,12 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using TripleA.Data.Entities;
 
 namespace TripleA.Service.Abstracts
 {
-    internal interface IAnswerService
+    public interface IAnswerService
     {
+        Task<string> AddAnswer(Answer question);
     }
 }

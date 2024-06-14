@@ -18,6 +18,8 @@ namespace TripleA.Infrustructure
 
             services.AddTransient<IQuestionRepository,QuestionRepository>();
 
+            services.AddTransient<IAnswerRepository,AnswerRepository>();
+
             return services;
         }
 
