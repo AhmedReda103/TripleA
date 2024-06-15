@@ -48,7 +48,7 @@ namespace TripleA.Infrustructure
 
             services.AddSwaggerGen(c =>
             {
-                c.SwaggerDoc("v1", new OpenApiInfo { Title = "TripleA Project", Version = "v1" });
+                c.SwaggerDoc("v1", new OpenApiInfo { Title = "TrippleA Project", Version = "v1" });
                 c.EnableAnnotations();
 
                 c.AddSecurityDefinition(JwtBearerDefaults.AuthenticationScheme, new OpenApiSecurityScheme

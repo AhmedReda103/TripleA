@@ -10,7 +10,9 @@ namespace TripleA.Service
         {
             services.AddTransient<IApplicationUserService, ApplicationUserService>();
 
-
+            services.AddTransient<IQuestionService, QuestionService>();
+            
+            services.AddTransient<IAnswerService, AnswerService>(); 
             return services;
         }
     }
