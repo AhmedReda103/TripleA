@@ -3,6 +3,7 @@ using TripleA.Core;
 using TripleA.Infrustructure;
 using TripleA.Infrustructure.Context;
 using TripleA.Service;
+using TripleA.Service.implementations;
 
 
 var builder = WebApplication.CreateBuilder(args);
@@ -12,7 +13,7 @@ var builder = WebApplication.CreateBuilder(args);
 builder.Services.AddInfrastructureDependencies()
         .AddServiceDependencies()
         .AddCoreDependencies()
-        .AddServiceRegisteration(builder.Configuration);
+        .AddServiceRegisteration(builder.Configuration).AddSignalR();
 
 builder.Services.AddControllers();
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
@@ -27,7 +28,10 @@ builder.Services.AddCors(corsOptions =>
 {
     corsOptions.AddPolicy("MyPolicy", corsPolicyBuilder =>
     {
-        corsPolicyBuilder.AllowAnyOrigin().AllowAnyHeader().AllowAnyMethod();
+        corsPolicyBuilder.WithOrigins("http://127.0.0.1:5500") //add your origin here
+                         .AllowAnyHeader()
+                         .AllowAnyMethod()
+                         .AllowCredentials();  //for signalR requests
     });
 });
 
@@ -53,5 +57,7 @@ app.UseAuthentication();
 app.UseAuthorization();
 
 app.MapControllers();
+
+app.MapHub<RealTimeService>("/notificationHub");
 
 app.Run();
