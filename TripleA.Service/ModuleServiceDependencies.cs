@@ -13,6 +13,8 @@ namespace TripleA.Service
             services.AddTransient<IQuestionService, QuestionService>();
             
             services.AddTransient<IAnswerService, AnswerService>(); 
+
+            
             return services;
         }
     }
