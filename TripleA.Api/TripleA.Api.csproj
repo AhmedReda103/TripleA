@@ -26,4 +26,8 @@
     <ProjectReference Include="..\TripleA.Core\TripleA.Core.csproj" />
   </ItemGroup>
 
+  <ItemGroup>
+    <Folder Include="wwwroot\" />
+  </ItemGroup>
+
 </Project>
