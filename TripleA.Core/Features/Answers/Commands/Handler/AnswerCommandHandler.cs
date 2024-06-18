@@ -39,10 +39,12 @@ namespace TripleA.Core.Features.Answers.Commands.Handler
             var AnswerMapper = mapper.Map<TripleA.Data.Entities.Answer>(request);
             var UserId = await applicationUserService.getUserIdAsync();  //ADD two roles then use ord. userid
             AnswerMapper.UserId = UserId;
+            AnswerMapper.CreatedIn = DateTime.Now;
             var result = await answerService.AddAnswer(AnswerMapper);
+            var AskerId = AnswerMapper?.Question?.UserId;
             if (result == "Added")
             {
-                await realTimeService.Clients.User(UserId).SendAsync("ReceiveNotification", SharedResourcesKeys.notificationMessage + $" : {AnswerMapper.Description}");
+                await realTimeService.Clients.User(AskerId).SendAsync("ReceiveNotification", SharedResourcesKeys.notificationMessage + $" : {AnswerMapper.Description}");
                 return Created("");
             }
             else return BadRequest<string>();
