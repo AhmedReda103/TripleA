@@ -15,7 +15,7 @@ namespace TripleA.Service.implementations
         {
             if (file == null)
             {
-                return "NoFile";
+                return "NOFile";
             }
 
             var path = _webHostEnvironment.WebRootPath + "/" + location + "/";

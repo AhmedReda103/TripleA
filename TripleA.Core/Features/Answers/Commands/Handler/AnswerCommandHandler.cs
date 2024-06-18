@@ -1,15 +1,8 @@
 ﻿using AutoMapper;
 using MediatR;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using TripleA.Core.Bases;
 using TripleA.Core.Features.Answers.Commands.Models;
-using TripleA.Core.Features.Question.Commands.Models;
 using TripleA.Service.Abstracts;
-using TripleA.Service.implementations;
 
 namespace TripleA.Core.Features.Answers.Commands.Handler
 {
@@ -33,7 +26,7 @@ namespace TripleA.Core.Features.Answers.Commands.Handler
             var AnswerMapper = mapper.Map<TripleA.Data.Entities.Answer>(request);
             var UserId = await applicationUserService.getUserIdAsync();  //ADD two roles then use ord. userid
             AnswerMapper.UserId = UserId;
-            var result = await answerService.AddAnswer(AnswerMapper);
+            var result = await answerService.AddAnswer(AnswerMapper, request.Image);
             if (result == "Added")
                 return Created("");
             else return BadRequest<string>();
