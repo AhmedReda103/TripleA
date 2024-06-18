@@ -28,7 +28,10 @@ builder.Services.AddCors(corsOptions =>
 {
     corsOptions.AddPolicy("MyPolicy", corsPolicyBuilder =>
     {
-        corsPolicyBuilder.AllowAnyOrigin().AllowAnyHeader().AllowAnyMethod();
+        corsPolicyBuilder.WithOrigins("http://127.0.0.1:5500") //add your origin here
+                         .AllowAnyHeader()
+                         .AllowAnyMethod()
+                         .AllowCredentials();  //for signalR requests
     });
 });
 
