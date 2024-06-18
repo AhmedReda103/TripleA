@@ -11,8 +11,13 @@ namespace TripleA.Service.implementations
         {
             _webHostEnvironment = webHostEnvironment;
         }
-        public async Task<string> UploadFile(string location, IFormFile file)
+        public async Task<string> UploadFile(string location, IFormFile? file)
         {
+            if (file == null)
+            {
+                return "NoFile";
+            }
+
             var path = _webHostEnvironment.WebRootPath + "/" + location + "/";
             var extention = Path.GetExtension(file.FileName);
             var fileName = Guid.NewGuid().ToString().Replace("-", string.Empty) + extention;
@@ -44,3 +49,5 @@ namespace TripleA.Service.implementations
         }
     }
 }
+
+
