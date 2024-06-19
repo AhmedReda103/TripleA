@@ -18,5 +18,14 @@ namespace TripleA.Api.Controllers
             //  Log.Information("Response data: {@Response}", response);
             return NewResult(response);
         }
+
+
+        [HttpGet]
+        [Authorize]
+        public async Task<IActionResult> GetCategoryList()
+        {
+            var response = await Mediator.Send(new GetCategoryListQuery());
+            return NewResult(response);
+        }
     }
 }

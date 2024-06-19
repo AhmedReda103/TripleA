@@ -4,7 +4,6 @@ namespace TripleA.Service.Abstracts
 {
     public interface ICategoryService
     {
-        //   Task<List<Question>> GetQuestionsByCategoryId(int categoryId);
 
         public Task<List<Category>> GetCategoryListAsync();
 

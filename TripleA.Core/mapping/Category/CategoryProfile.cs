@@ -11,6 +11,7 @@ namespace TripleA.Core.mapping.Category
 
 
             CreateMap<Question, GetQuestionsByCategoryIdPaginatedResponse>();
+            CreateMap<TripleA.Data.Entities.Category, GetCategoryListDto>();
         }
     }
 }
