@@ -16,9 +16,11 @@ namespace TripleA.Infrustructure
 
             services.AddTransient<IUnitOfWork, UnitOfWork>();
 
-            services.AddTransient<IQuestionRepository,QuestionRepository>();
+            services.AddTransient<IQuestionRepository, QuestionRepository>();
 
-            services.AddTransient<IAnswerRepository,AnswerRepository>();
+            services.AddTransient<IAnswerRepository, AnswerRepository>();
+            services.AddTransient<ICategoryRepository, CategoryRepository>();
+            services.AddTransient<IUserRepository, UserRepository>();
 
             return services;
         }

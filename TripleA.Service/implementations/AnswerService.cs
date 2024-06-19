@@ -1,4 +1,6 @@
-﻿using System.Diagnostics;
+
+using System.Diagnostics;
+using Microsoft.AspNetCore.Http;
 using TripleA.Data.Entities;
 using TripleA.Infrustructure.unitOfWork;
 using TripleA.Service.Abstracts;
@@ -9,13 +11,23 @@ namespace TripleA.Service.implementations
     public class AnswerService : IAnswerService
     {
         private readonly IUnitOfWork unitOfWork;
+        private readonly IFileService fileService;
 
-        public AnswerService(IUnitOfWork unitOfWork)
+        public AnswerService(IUnitOfWork unitOfWork, IFileService fileService)
         {
             this.unitOfWork = unitOfWork;
+            this.fileService = fileService;
         }
-        public async Task<string> AddAnswer(Answer answer)
+        public async Task<string> AddAnswer(Answer answer, IFormFile file)
         {
+            var fileUrl = await fileService.UploadFile("Answer", file);
+            switch (fileUrl)
+            {
+                case "NoFile": return "NoFile";
+                case "FailedToUploadFile": return "FailedToUploadFile";
+            }
+            answer.Image = fileUrl;
+
             await unitOfWork.Answers.AddAsync(answer);
             await unitOfWork.SaveChangesAsync();
             return "Added";
@@ -38,7 +50,6 @@ namespace TripleA.Service.implementations
             await unitOfWork.SaveChangesAsync();
         }
 
-
         public async Task<string> DeleteAsync(Answer answer)
         {
             var trans = unitOfWork.Answers.BeginTransaction();
@@ -57,6 +68,10 @@ namespace TripleA.Service.implementations
             }
         }
 
-
+        public async Task<string> getReplyerIdOfAnswer(int answerId)
+        {
+            var answer =await unitOfWork.Answers.GetByIdAsync(answerId);
+            return answer.UserId;
+        }
     }
 }

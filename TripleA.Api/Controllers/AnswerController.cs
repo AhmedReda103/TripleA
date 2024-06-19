@@ -11,7 +11,7 @@ namespace TripleA.Api.Controllers
     {
         [HttpPost("/AddAnswer")]
         [Authorize]
-        public async Task<IActionResult> Create([FromBody] AddAnswerCommand command)
+        public async Task<IActionResult> Create([FromForm] AddAnswerCommand command)
         {
             return NewResult(await Mediator.Send(command));
         }

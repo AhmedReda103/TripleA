@@ -36,8 +36,10 @@ namespace TripleA.Core.Features.Answers.Commands.Handler
             var AnswerMapper = mapper.Map<TripleA.Data.Entities.Answer>(request);
             var UserId = await applicationUserService.getUserIdAsync();  //ADD two roles then use ord. userid
             AnswerMapper.UserId = UserId;
+
+            var result = await answerService.AddAnswer(AnswerMapper, request.Image);
+
             AnswerMapper.CreatedIn = DateTime.Now;
-            var result = await answerService.AddAnswer(AnswerMapper);
             var AskerId = AnswerMapper?.Question?.UserId;
             if (result == "Added")
             {
@@ -50,14 +52,19 @@ namespace TripleA.Core.Features.Answers.Commands.Handler
         public async Task<Response<string>> Handle(UpVoteAnswerCommand request, CancellationToken cancellationToken)
         {
             var answer = await answerService.getAnswerById(request.AnswerId);
-            answerService.Upvote(answer);
+            var replyerId = await answerService.getReplyerIdOfAnswer(request.AnswerId);
+            await applicationUserService.upUser(replyerId);
+            await answerService.Upvote(answer);
+           
             return Success("");
         }
 
         public async Task<Response<string>> Handle(DownVoteAnswerCommand request, CancellationToken cancellationToken)
         {
             var answer = await answerService.getAnswerById(request.AnswerId);
-            answerService.DownVote(answer);
+            var replyerId = await answerService.getReplyerIdOfAnswer(request.AnswerId);
+            await applicationUserService.DownUser(replyerId);
+            await answerService.DownVote(answer);
             return Success("");
         }
 

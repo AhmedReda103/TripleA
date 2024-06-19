@@ -6,6 +6,7 @@ namespace TripleA.Infrustructure.InfrastructureBases
     public interface IGenericRepository<T> where T : class
     {
         Task<T> GetByIdAsync(int id);
+        Task<T> GetByIdAsync(string Guid);
         IQueryable<T> GetTableNoTracking();
         Task<IEnumerable<T>> GetAllAsync();
         Task<IEnumerable<T>> GetAllPaginationAsync(int? pageNumber, int? itemNumber);
