@@ -31,7 +31,7 @@
         public const string TryToRegisterAgain = "TryToRegisterAgain";
         public const string USERROLE = "User";
         public const string ADMINROLE = "Admin";
-
+        public const string notificationMessage = "A new answer has been posted to your question.";
 
     }
 }

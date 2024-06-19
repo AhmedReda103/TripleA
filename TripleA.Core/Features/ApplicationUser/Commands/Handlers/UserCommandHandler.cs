@@ -41,7 +41,7 @@ namespace TripleA.Core.Features.ApplicationUser.Commands.Handlers
         {
             var identityUser = _mapper.Map<User>(request);
             //Create
-            var createResult = await _applicationUserService.AddUserAsync(identityUser, request.Password, SharedResourcesKeys.USERROLE);
+            var createResult = await _applicationUserService.AddUserAsync(identityUser, request.Password);
 
             return getResponse(createResult);
 
