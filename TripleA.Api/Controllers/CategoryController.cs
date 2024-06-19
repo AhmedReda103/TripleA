@@ -31,7 +31,7 @@ namespace TripleA.Api.Controllers
 
 
         [HttpPost("/AddCategory")]
-        [Authorize]
+        //  [Authorize]
         public async Task<IActionResult> Create([FromBody] AddCategoryCommand command)
         {
             return NewResult(await Mediator.Send(command));
