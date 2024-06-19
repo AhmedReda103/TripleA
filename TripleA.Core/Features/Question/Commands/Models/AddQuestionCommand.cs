@@ -1,9 +1,5 @@
 ﻿using MediatR;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+using Microsoft.AspNetCore.Http;
 using TripleA.Core.Bases;
 
 namespace TripleA.Core.Features.Question.Commands.Models
@@ -15,5 +11,6 @@ namespace TripleA.Core.Features.Question.Commands.Models
         //public string Image { get; set; }
        // public DateTime CreatedIn { get; set; }
         public int CategoryId { get; set; }
+        public IFormFile? Image { get; set; }
     }
 }
