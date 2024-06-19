@@ -3,10 +3,12 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using TripleA.Data.Entities.Identity;
+using TripleA.Infrustructure.InfrastructureBases;
 
 namespace TripleA.Infrustructure.Abstractions
 {
-    internal interface IUserRepository
+    public interface IUserRepository   : IGenericRepository<User>
     {
     }
 }
