@@ -15,5 +15,12 @@ namespace TripleA.Api.Controllers
         {
             return NewResult(await Mediator.Send(command));
         }
+
+        [HttpPost("/deleteQuestion")]
+        //[Authorize]
+        public async Task<IActionResult> Delete(int id)
+        {
+            return NewResult(await Mediator.Send(new DeleteQuestionCommand(id)));
+        }
     }
 }
