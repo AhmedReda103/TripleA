@@ -1,4 +1,5 @@
 ﻿using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore.Storage;
 using System.Linq.Expressions;
 using TripleA.Infrustructure.Context;
 
@@ -18,9 +19,14 @@ namespace TripleA.Infrustructure.InfrastructureBases
             return await _context.Set<T>().ToListAsync();
         }
 
-        public async Task<T> GetByIdAsync(int id)
+        public virtual async Task<T> GetByIdAsync(int id)
         {
             return await _context.Set<T>().FindAsync(id);
+        }
+
+        public async Task<T> GetByIdAsync(string Guid)
+        {
+            return await _context.Set<T>().FindAsync(Guid);
         }
 
 
@@ -130,7 +136,36 @@ namespace TripleA.Infrustructure.InfrastructureBases
             return _context.Set<T>().AsNoTracking().AsQueryable();
         }
 
+        public IDbContextTransaction BeginTransaction()
+        {
+            return _context.Database.BeginTransaction();
+        }
 
+        public void Commit()
+        {
+            _context.Database.CommitTransaction();
+
+        }
+
+        public void RollBack()
+        {
+            _context.Database.RollbackTransaction();
+        }
+
+        public async Task<IDbContextTransaction> BeginTransactionAsync()
+        {
+            return await _context.Database.BeginTransactionAsync();
+        }
+
+        public async Task CommitAsync()
+        {
+            await _context.Database.CommitTransactionAsync();
+        }
+
+        public async Task RollBackAsync()
+        {
+            await _context.Database.RollbackTransactionAsync();
+        }
 
     }
 }

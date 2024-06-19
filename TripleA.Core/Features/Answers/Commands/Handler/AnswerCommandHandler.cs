@@ -12,7 +12,10 @@ namespace TripleA.Core.Features.Answers.Commands.Handler
     public class AnswerCommandHandler : ResponseHandler,
                                         IRequestHandler<AddAnswerCommand, Response<string>>,
                                         IRequestHandler<UpVoteAnswerCommand, Response<string>>,
-                                        IRequestHandler<DownVoteAnswerCommand, Response<string>>
+                                        IRequestHandler<DownVoteAnswerCommand, Response<string>>,
+                                        IRequestHandler<DeleteAnswerCommand, Response<string>>
+
+
     {
         private readonly IMapper mapper;
         private readonly IAnswerService answerService;
@@ -50,15 +53,31 @@ namespace TripleA.Core.Features.Answers.Commands.Handler
         public async Task<Response<string>> Handle(UpVoteAnswerCommand request, CancellationToken cancellationToken)
         {
             var answer = await answerService.getAnswerById(request.AnswerId);
-            answerService.Upvote(answer);
+            var replyerId = await answerService.getReplyerIdOfAnswer(request.AnswerId);
+            await applicationUserService.upUser(replyerId);
+            await answerService.Upvote(answer);
+           
             return Success("");
         }
 
         public async Task<Response<string>> Handle(DownVoteAnswerCommand request, CancellationToken cancellationToken)
         {
             var answer = await answerService.getAnswerById(request.AnswerId);
-            answerService.DownVote(answer);
+            var replyerId = await answerService.getReplyerIdOfAnswer(request.AnswerId);
+            await applicationUserService.DownUser(replyerId);
+            await answerService.DownVote(answer);
             return Success("");
+        }
+
+        public async Task<Response<string>> Handle(DeleteAnswerCommand request, CancellationToken cancellationToken)
+        {
+            var answer = await answerService.getAnswerById(request.Id);
+            //return NotFound
+            if (answer == null) return NotFound<string>();
+            //Call service that make Delete
+            var result = await answerService.DeleteAsync(answer);
+            if (result == "Success") return Deleted<string>();
+            else return BadRequest<string>();
         }
     }
 }

@@ -1,4 +1,5 @@
 ﻿using Microsoft.AspNetCore.Http;
+using System.Diagnostics;
 using TripleA.Data.Entities;
 using TripleA.Infrustructure.unitOfWork;
 using TripleA.Service.Abstracts;
@@ -32,5 +33,28 @@ namespace TripleA.Service.implementations
             return "Added";
         }
 
+        public async Task<string> DeleteAsync(Question question)
+        {
+            var trans = _unitOfWork.Questions.BeginTransaction();
+            try
+            {
+                _unitOfWork.Questions.Delete(question);
+                await _unitOfWork.SaveChangesAsync();
+                await trans.CommitAsync();
+                return "Success";
+            }
+            catch (Exception ex)
+            {
+                await trans.RollbackAsync();
+                Debug.WriteLine(ex.Message);
+                return "Falied";
+            }
+        }
+
+        public async Task<Question> GetByIDAsync(int id)
+        {
+            var question = await _unitOfWork.Questions.GetByIdAsync(id);
+            return question;
+        }
     }
 }

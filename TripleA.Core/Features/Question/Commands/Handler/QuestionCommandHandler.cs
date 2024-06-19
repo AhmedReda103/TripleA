@@ -8,6 +8,7 @@ namespace TripleA.Core.Features.Question.Commands.Handlers
 {
     public class QuestionCommandHandler : ResponseHandler,
                                           IRequestHandler<AddQuestionCommand, Response<string>>
+                                          , IRequestHandler<DeleteQuestionCommand, Response<string>>
     {
         private readonly IMapper mapper;
         private readonly IQuestionService questionService;
@@ -27,7 +28,7 @@ namespace TripleA.Core.Features.Question.Commands.Handlers
             var UserId = await applicationUserService.getUserIdAsync();  //ADD two roles then use ord. userid
             QuestionMapper.UserId = UserId;
 
-            QuestionMapper.CreatedIn= DateTime.Now;
+            QuestionMapper.CreatedIn = DateTime.Now;
 
             var result = await questionService.AddQuestion(QuestionMapper, request.Image);
 
@@ -35,6 +36,17 @@ namespace TripleA.Core.Features.Question.Commands.Handlers
                 return Created("");
             else return BadRequest<string>();
 
+        }
+
+        public async Task<Response<string>> Handle(DeleteQuestionCommand request, CancellationToken cancellationToken)
+        {
+            var question = await questionService.GetByIDAsync(request.Id);
+            //return NotFound
+            if (question == null) return NotFound<string>();
+            //Call service that make Delete
+            var result = await questionService.DeleteAsync(question);
+            if (result == "Success") return Deleted<string>();
+            else return BadRequest<string>();
         }
     }
 }

@@ -1,5 +1,7 @@
-﻿using Microsoft.AspNetCore.Http;
+
+using Microsoft.AspNetCore.Http;
 using TripleA.Data.Entities;
+
 
 namespace TripleA.Service.Abstracts
 {
@@ -9,7 +11,9 @@ namespace TripleA.Service.Abstracts
         Task<string> AddAnswer(Answer question, IFormFile file);
         Task<Answer> getAnswerById(int answerId);
         Task Upvote(Answer answer);
-
         Task DownVote(Answer answer);
+        public Task<string> DeleteAsync(Answer answer);
+        Task<string> getReplyerIdOfAnswer(int answerId);
+
     }
 }
