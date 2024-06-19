@@ -13,6 +13,7 @@ using TripleA.Core.Features.Question.Commands.Models;
 using TripleA.Core.Resources;
 using TripleA.Data.Entities.Identity;
 using TripleA.Service.Abstracts;
+using TripleA.Service.implementations;
 
 namespace TripleA.Core.Features.Answers.Commands.Handler
 {
@@ -57,7 +58,10 @@ namespace TripleA.Core.Features.Answers.Commands.Handler
         public async Task<Response<string>> Handle(UpVoteAnswerCommand request, CancellationToken cancellationToken)
         {
             var answer = await answerService.getAnswerById(request.AnswerId);
-            answerService.Upvote(answer);
+            var replyerId = await answerService.getReplyerIdOfAnswer(request.AnswerId);
+            await applicationUserService.upUser(replyerId);
+            await answerService.Upvote(answer);
+           
             return Success("");
         }
 
