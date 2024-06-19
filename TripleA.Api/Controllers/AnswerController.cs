@@ -1,9 +1,7 @@
 ﻿using Microsoft.AspNetCore.Authorization;
-using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using TripleA.Api.Base;
 using TripleA.Core.Features.Answers.Commands.Models;
-using TripleA.Core.Features.Question.Commands.Models;
 
 namespace TripleA.Api.Controllers
 {
@@ -23,7 +21,7 @@ namespace TripleA.Api.Controllers
         [Authorize]
         public async Task<IActionResult> UpVote(int answerId)
         {
-            return NewResult(await Mediator.Send(new UpVoteAnswerCommand {AnswerId=answerId}));
+            return NewResult(await Mediator.Send(new UpVoteAnswerCommand { AnswerId = answerId }));
         }
 
         [HttpPost("downvote/{answerId}")]
@@ -32,5 +30,13 @@ namespace TripleA.Api.Controllers
         {
             return NewResult(await Mediator.Send(new DownVoteAnswerCommand { AnswerId = answerId }));
         }
+
+        [HttpPost("/deleteAnswer")]
+        //[Authorize]
+        public async Task<IActionResult> Delete(int id)
+        {
+            return NewResult(await Mediator.Send(new DeleteAnswerCommand(id)));
+        }
+
     }
 }
