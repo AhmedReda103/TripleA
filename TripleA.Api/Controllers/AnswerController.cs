@@ -17,5 +17,13 @@ namespace TripleA.Api.Controllers
         {
             return NewResult(await Mediator.Send(command));
         }
+
+
+        [HttpPost("upvote/{answerId}")]
+        [Authorize]
+        public async Task<IActionResult> UpVote(int answerId)
+        {
+            return NewResult(await Mediator.Send(new UpVoteAnswerCommand {AnswerId=answerId}));
+        }
     }
 }

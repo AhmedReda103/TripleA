@@ -10,5 +10,8 @@ namespace TripleA.Service.Abstracts
     public interface IAnswerService
     {
         Task<string> AddAnswer(Answer question);
+        void DownVote(Answer answer);
+        Task<Answer> getAnswerById(int answerId);
+        Task Upvote(Answer answer);
     }
 }
