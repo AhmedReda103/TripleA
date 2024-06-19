@@ -1,5 +1,6 @@
 ﻿using AutoMapper;
 using MediatR;
+using Microsoft.AspNetCore.Http.HttpResults;
 using Microsoft.AspNetCore.SignalR;
 using System;
 using System.Collections.Generic;
@@ -17,7 +18,9 @@ using TripleA.Service.implementations;
 namespace TripleA.Core.Features.Answers.Commands.Handler
 {
     public class AnswerCommandHandler : ResponseHandler,
-                                          IRequestHandler<AddAnswerCommand, Response<string>>
+                                        IRequestHandler<AddAnswerCommand, Response<string>>,
+                                        IRequestHandler<UpVoteAnswerCommand , Response<string>>,
+                                        IRequestHandler<DownVoteAnswerCommand, Response<string>>
     {
         private readonly IMapper mapper;
         private readonly IAnswerService answerService;
@@ -48,6 +51,20 @@ namespace TripleA.Core.Features.Answers.Commands.Handler
                 return Created("");
             }
             else return BadRequest<string>();
+        }
+
+        public async Task<Response<string>> Handle(UpVoteAnswerCommand request, CancellationToken cancellationToken)
+        {
+            var answer = await answerService.getAnswerById(request.AnswerId);
+            answerService.Upvote(answer);
+            return Success("");
+        }
+
+        public async Task<Response<string>> Handle(DownVoteAnswerCommand request, CancellationToken cancellationToken)
+        {
+            var answer = await answerService.getAnswerById(request.AnswerId);
+            answerService.DownVote(answer);
+            return Success("");
         }
     }
 }
