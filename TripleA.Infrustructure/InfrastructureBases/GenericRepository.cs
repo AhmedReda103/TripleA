@@ -23,6 +23,11 @@ namespace TripleA.Infrustructure.InfrastructureBases
             return await _context.Set<T>().FindAsync(id);
         }
 
+        public async Task<T> GetByIdAsync(string Guid)
+        {
+            return await _context.Set<T>().FindAsync(Guid);
+        }
+
 
         public async Task<T> FindAsync(Expression<Func<T, bool>> criteria, string[] includes = null)
         {
@@ -130,7 +135,6 @@ namespace TripleA.Infrustructure.InfrastructureBases
             return _context.Set<T>().AsNoTracking().AsQueryable();
         }
 
-
-
+       
     }
 }

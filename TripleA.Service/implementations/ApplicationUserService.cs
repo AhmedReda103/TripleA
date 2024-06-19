@@ -140,5 +140,19 @@ namespace TripleA.Service.implementations
             var userId = userIdClaim.Value;
             return userId;
         }
+
+        public async Task upUser(string userId)
+        {
+            var user = await unitOfWork.Users.GetByIdAsync(userId);
+            user.Votes++;
+            await unitOfWork.SaveChangesAsync();
+        }
+
+        public async Task DownUser(string userId)
+        {
+            var user = await unitOfWork.Users.GetByIdAsync(userId);
+            user.Votes--;
+            await unitOfWork.SaveChangesAsync();
+        }
     }
 }

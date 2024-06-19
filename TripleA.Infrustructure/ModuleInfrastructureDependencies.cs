@@ -20,6 +20,7 @@ namespace TripleA.Infrustructure
 
             services.AddTransient<IAnswerRepository, AnswerRepository>();
             services.AddTransient<ICategoryRepository, CategoryRepository>();
+            services.AddTransient<IUserRepository, UserRepository>();
 
             return services;
         }

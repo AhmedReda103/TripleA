@@ -11,5 +11,6 @@ namespace TripleA.Service.Abstracts
         Task Upvote(Answer answer);
 
         Task DownVote(Answer answer);
+        Task<string> getReplyerIdOfAnswer(int answerId);
     }
 }

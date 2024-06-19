@@ -47,5 +47,11 @@ namespace TripleA.Service.implementations
             answer.Votes--;
             await unitOfWork.SaveChangesAsync();
         }
+
+        public async Task<string> getReplyerIdOfAnswer(int answerId)
+        {
+            var answer =await unitOfWork.Answers.GetByIdAsync(answerId);
+            return answer.UserId;
+        }
     }
 }
