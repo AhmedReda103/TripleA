@@ -1,7 +1,10 @@
+using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using TripleA.Core;
+using TripleA.Data.Entities.Identity;
 using TripleA.Infrustructure;
 using TripleA.Infrustructure.Context;
+using TripleA.Infrustructure.seeder;
 using TripleA.Service;
 using TripleA.Service.implementations;
 
@@ -44,6 +47,17 @@ if (app.Environment.IsDevelopment())
     app.UseSwagger();
     app.UseSwaggerUI();
 }
+
+
+using (var scope = app.Services.CreateScope())
+{
+    var userManager = scope.ServiceProvider.GetRequiredService<UserManager<User>>();
+    var roleManager = scope.ServiceProvider.GetRequiredService<RoleManager<IdentityRole>>();
+    await RoleSeeder.SeedAsync(roleManager);
+    await UserSeeder.SeedAsync(userManager);
+}
+
+
 
 app.UseCors("MyPolicy");
 

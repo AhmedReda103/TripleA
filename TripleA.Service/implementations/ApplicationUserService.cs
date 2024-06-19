@@ -1,6 +1,5 @@
 ﻿
 using Microsoft.AspNetCore.Http;
-using Microsoft.AspNetCore.Identity;
 using Microsoft.IdentityModel.Tokens;
 using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
@@ -10,6 +9,7 @@ using TripleA.Data.Helpers;
 using TripleA.Domain.Results;
 using TripleA.Infrustructure.unitOfWork;
 using TripleA.Service.Abstracts;
+
 
 namespace TripleA.Service.implementations
 {
@@ -35,7 +35,7 @@ namespace TripleA.Service.implementations
 
         }
 
-        public async Task<string> AddUserAsync(User user, string password, string role)
+        public async Task<string> AddUserAsync(User user, string password)
         {
             var trans = await unitOfWork._context.Database.BeginTransactionAsync();
             try
@@ -57,7 +57,7 @@ namespace TripleA.Service.implementations
 
 
                 //assign User To Role
-                await assignUserRole(role, user);
+                await assignUserRole(user);
 
                 await trans.CommitAsync();
                 return "Success";
@@ -71,30 +71,11 @@ namespace TripleA.Service.implementations
 
 
 
-        private async Task assignUserRole(string role, User user)
+        private async Task assignUserRole(User user)
         {
-            IdentityRole? userRole = new IdentityRole("User");
-            IdentityRole? adminRole = new IdentityRole("Admin");
-            if (role == "User")
-            {
-                if (!await unitOfWork._roleManager.RoleExistsAsync("User"))
-                {
-                    await unitOfWork._roleManager.CreateAsync(userRole);
-                }
-                await unitOfWork._userManager.AddToRoleAsync(user, userRole.Name);
-            }
-            else if (role == "Admin")
-            {
-                if (!await unitOfWork._roleManager.RoleExistsAsync("Admin"))
-                {
-                    await unitOfWork._roleManager.CreateAsync(adminRole);
-                }
-                await unitOfWork._userManager.AddToRoleAsync(user, adminRole.Name);
-            }
+            await unitOfWork._userManager.AddToRoleAsync(user, "USER");
 
         }
-
-
 
 
         public async Task<JwtAuthResult> GetJWTToken(User user)
