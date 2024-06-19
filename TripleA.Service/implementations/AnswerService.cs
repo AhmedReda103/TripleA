@@ -36,7 +36,8 @@ namespace TripleA.Service.implementations
              answer.Votes++;
              await unitOfWork.SaveChangesAsync();
         }
-        public async Task Downvote(Answer answer)
+
+        public async Task DownVote(Answer answer)
         {
             answer.Votes--;
             await unitOfWork.SaveChangesAsync();
