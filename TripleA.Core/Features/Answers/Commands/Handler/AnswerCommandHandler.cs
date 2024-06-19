@@ -68,7 +68,9 @@ namespace TripleA.Core.Features.Answers.Commands.Handler
         public async Task<Response<string>> Handle(DownVoteAnswerCommand request, CancellationToken cancellationToken)
         {
             var answer = await answerService.getAnswerById(request.AnswerId);
-            answerService.DownVote(answer);
+            var replyerId = await answerService.getReplyerIdOfAnswer(request.AnswerId);
+            await applicationUserService.DownUser(replyerId);
+            await answerService.DownVote(answer);
             return Success("");
         }
     }
