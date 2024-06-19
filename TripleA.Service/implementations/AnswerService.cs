@@ -1,4 +1,6 @@
-﻿using Microsoft.AspNetCore.Http;
+
+using System.Diagnostics;
+using Microsoft.AspNetCore.Http;
 using TripleA.Data.Entities;
 using TripleA.Infrustructure.unitOfWork;
 using TripleA.Service.Abstracts;
@@ -38,14 +40,32 @@ namespace TripleA.Service.implementations
 
         public async Task Upvote(Answer answer)
         {
-             answer.Votes++;
-             await unitOfWork.SaveChangesAsync();
+            answer.Votes++;
+            await unitOfWork.SaveChangesAsync();
         }
 
         public async Task DownVote(Answer answer)
         {
             answer.Votes--;
             await unitOfWork.SaveChangesAsync();
+        }
+
+        public async Task<string> DeleteAsync(Answer answer)
+        {
+            var trans = unitOfWork.Answers.BeginTransaction();
+            try
+            {
+                unitOfWork.Answers.Delete(answer);
+                await unitOfWork.SaveChangesAsync();
+                await trans.CommitAsync();
+                return "Success";
+            }
+            catch (Exception ex)
+            {
+                await trans.RollbackAsync();
+                Debug.WriteLine(ex.Message);
+                return "Falied";
+            }
         }
 
         public async Task<string> getReplyerIdOfAnswer(int answerId)

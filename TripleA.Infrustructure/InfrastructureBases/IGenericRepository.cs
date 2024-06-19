@@ -1,4 +1,5 @@
-﻿using System.Linq.Expressions;
+﻿using Microsoft.EntityFrameworkCore.Storage;
+using System.Linq.Expressions;
 
 namespace TripleA.Infrustructure.InfrastructureBases
 {
@@ -21,5 +22,13 @@ namespace TripleA.Infrustructure.InfrastructureBases
         void DeleteRange(IEnumerable<T> entities);
         int Count();
         Task<int> CountAsync(Expression<Func<T, bool>> expression);
+
+
+        IDbContextTransaction BeginTransaction();
+        void Commit();
+        void RollBack();
+        Task<IDbContextTransaction> BeginTransactionAsync();
+        Task CommitAsync();
+        Task RollBackAsync();
     }
 }

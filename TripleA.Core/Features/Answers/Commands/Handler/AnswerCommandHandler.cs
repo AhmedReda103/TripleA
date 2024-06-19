@@ -1,17 +1,9 @@
 ﻿using AutoMapper;
 using MediatR;
-using Microsoft.AspNetCore.Http.HttpResults;
 using Microsoft.AspNetCore.SignalR;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using TripleA.Core.Bases;
 using TripleA.Core.Features.Answers.Commands.Models;
-using TripleA.Core.Features.Question.Commands.Models;
 using TripleA.Core.Resources;
-using TripleA.Data.Entities.Identity;
 using TripleA.Service.Abstracts;
 using TripleA.Service.implementations;
 
@@ -19,8 +11,10 @@ namespace TripleA.Core.Features.Answers.Commands.Handler
 {
     public class AnswerCommandHandler : ResponseHandler,
                                         IRequestHandler<AddAnswerCommand, Response<string>>,
-                                        IRequestHandler<UpVoteAnswerCommand , Response<string>>,
-                                        IRequestHandler<DownVoteAnswerCommand, Response<string>>
+                                        IRequestHandler<UpVoteAnswerCommand, Response<string>>,
+                                        IRequestHandler<DownVoteAnswerCommand, Response<string>>,
+                                        IRequestHandler<DeleteAnswerCommand, Response<string>>
+
     {
         private readonly IMapper mapper;
         private readonly IAnswerService answerService;
@@ -72,6 +66,17 @@ namespace TripleA.Core.Features.Answers.Commands.Handler
             await applicationUserService.DownUser(replyerId);
             await answerService.DownVote(answer);
             return Success("");
+        }
+
+        public async Task<Response<string>> Handle(DeleteAnswerCommand request, CancellationToken cancellationToken)
+        {
+            var answer = await answerService.getAnswerById(request.Id);
+            //return NotFound
+            if (answer == null) return NotFound<string>();
+            //Call service that make Delete
+            var result = await answerService.DeleteAsync(answer);
+            if (result == "Success") return Deleted<string>();
+            else return BadRequest<string>();
         }
     }
 }
