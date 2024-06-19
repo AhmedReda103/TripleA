@@ -5,6 +5,7 @@ using TripleA.Service.Abstracts;
 
 namespace TripleA.Service.implementations
 {
+
     public class AnswerService : IAnswerService
     {
         private readonly IUnitOfWork unitOfWork;
@@ -28,6 +29,23 @@ namespace TripleA.Service.implementations
             await unitOfWork.Answers.AddAsync(answer);
             await unitOfWork.SaveChangesAsync();
             return "Added";
+        }
+
+        public async Task<Answer> getAnswerById(int answerId)
+        {
+            return await unitOfWork.Answers.GetByIdAsync(answerId);
+        }
+
+        public async Task Upvote(Answer answer)
+        {
+             answer.Votes++;
+             await unitOfWork.SaveChangesAsync();
+        }
+
+        public async Task DownVote(Answer answer)
+        {
+            answer.Votes--;
+            await unitOfWork.SaveChangesAsync();
         }
     }
 }

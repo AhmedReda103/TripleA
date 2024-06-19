@@ -26,7 +26,11 @@ namespace TripleA.Core.Features.Question.Commands.Handlers
             var QuestionMapper = mapper.Map<TripleA.Data.Entities.Question>(request);
             var UserId = await applicationUserService.getUserIdAsync();  //ADD two roles then use ord. userid
             QuestionMapper.UserId = UserId;
+
+            QuestionMapper.CreatedIn= DateTime.Now;
+
             var result = await questionService.AddQuestion(QuestionMapper, request.Image);
+
             if (result == "Added")
                 return Created("");
             else return BadRequest<string>();
