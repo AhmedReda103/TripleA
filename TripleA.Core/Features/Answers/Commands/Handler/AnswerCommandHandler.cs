@@ -13,7 +13,6 @@ using TripleA.Core.Features.Question.Commands.Models;
 using TripleA.Core.Resources;
 using TripleA.Data.Entities.Identity;
 using TripleA.Service.Abstracts;
-using TripleA.Service.implementations;
 
 namespace TripleA.Core.Features.Answers.Commands.Handler
 {
@@ -42,8 +41,10 @@ namespace TripleA.Core.Features.Answers.Commands.Handler
             var AnswerMapper = mapper.Map<TripleA.Data.Entities.Answer>(request);
             var UserId = await applicationUserService.getUserIdAsync();  //ADD two roles then use ord. userid
             AnswerMapper.UserId = UserId;
+
+            var result = await answerService.AddAnswer(AnswerMapper, request.Image);
+
             AnswerMapper.CreatedIn = DateTime.Now;
-            var result = await answerService.AddAnswer(AnswerMapper);
             var AskerId = AnswerMapper?.Question?.UserId;
             if (result == "Added")
             {
