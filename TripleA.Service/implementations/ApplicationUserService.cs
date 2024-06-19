@@ -73,23 +73,23 @@ namespace TripleA.Service.implementations
 
         private async Task assignUserRole(string role, User user)
         {
-            IdentityRole? applicantRole = new IdentityRole("User");
-            IdentityRole? companyRole = new IdentityRole("Admin");
+            IdentityRole? userRole = new IdentityRole("User");
+            IdentityRole? adminRole = new IdentityRole("Admin");
             if (role == "User")
             {
                 if (!await unitOfWork._roleManager.RoleExistsAsync("User"))
                 {
-                    await unitOfWork._roleManager.CreateAsync(applicantRole);
+                    await unitOfWork._roleManager.CreateAsync(userRole);
                 }
-                await unitOfWork._userManager.AddToRoleAsync(user, applicantRole.Name);
+                await unitOfWork._userManager.AddToRoleAsync(user, userRole.Name);
             }
             else if (role == "Admin")
             {
                 if (!await unitOfWork._roleManager.RoleExistsAsync("Admin"))
                 {
-                    await unitOfWork._roleManager.CreateAsync(companyRole);
+                    await unitOfWork._roleManager.CreateAsync(adminRole);
                 }
-                await unitOfWork._userManager.AddToRoleAsync(user, companyRole.Name);
+                await unitOfWork._userManager.AddToRoleAsync(user, adminRole.Name);
             }
 
         }
