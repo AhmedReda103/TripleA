@@ -1,24 +1,17 @@
 ﻿using AutoMapper;
 using MediatR;
-using Microsoft.AspNetCore.Http.HttpResults;
 using Microsoft.AspNetCore.SignalR;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using TripleA.Core.Bases;
 using TripleA.Core.Features.Answers.Commands.Models;
-using TripleA.Core.Features.Question.Commands.Models;
 using TripleA.Core.Resources;
-using TripleA.Data.Entities.Identity;
 using TripleA.Service.Abstracts;
+using TripleA.Service.implementations;
 
 namespace TripleA.Core.Features.Answers.Commands.Handler
 {
     public class AnswerCommandHandler : ResponseHandler,
                                         IRequestHandler<AddAnswerCommand, Response<string>>,
-                                        IRequestHandler<UpVoteAnswerCommand , Response<string>>,
+                                        IRequestHandler<UpVoteAnswerCommand, Response<string>>,
                                         IRequestHandler<DownVoteAnswerCommand, Response<string>>
     {
         private readonly IMapper mapper;

@@ -1,6 +1,7 @@
 ﻿using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using TripleA.Api.Base;
+using TripleA.Core.Features.Category.commands.Model;
 using TripleA.Core.Features.Category.queries.Model;
 
 
@@ -26,6 +27,14 @@ namespace TripleA.Api.Controllers
         {
             var response = await Mediator.Send(new GetCategoryListQuery());
             return NewResult(response);
+        }
+
+
+        [HttpPost("/AddCategory")]
+        [Authorize]
+        public async Task<IActionResult> Create([FromBody] AddCategoryCommand command)
+        {
+            return NewResult(await Mediator.Send(command));
         }
     }
 }
