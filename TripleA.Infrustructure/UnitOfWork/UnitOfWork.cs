@@ -17,6 +17,8 @@ namespace TripleA.Infrustructure.unitOfWork
         public IQuestionRepository Questions { get; }
 
         public IAnswerRepository Answers { get; }
+        public ICommentRepository Comments { get; }
+
 
         public UnitOfWork(
             ApplicationDbContext context,
@@ -29,6 +31,8 @@ namespace TripleA.Infrustructure.unitOfWork
             _roleManager = roleManager;
             Questions = new QuestionRepository(_context);
             Answers = new AnswerRepository(_context);
+            Comments = new CommentRepository(_context);
+
         }
 
 
