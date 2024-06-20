@@ -1,6 +1,6 @@
 
-using System.Diagnostics;
 using Microsoft.AspNetCore.Http;
+using System.Diagnostics;
 using TripleA.Data.Entities;
 using TripleA.Infrustructure.unitOfWork;
 using TripleA.Service.Abstracts;
@@ -70,8 +70,31 @@ namespace TripleA.Service.implementations
 
         public async Task<string> getReplyerIdOfAnswer(int answerId)
         {
-            var answer =await unitOfWork.Answers.GetByIdAsync(answerId);
+            var answer = await unitOfWork.Answers.GetByIdAsync(answerId);
             return answer.UserId;
         }
+
+        public async Task<Answer> GetAnswerByIdAsync(int Id)
+        {
+            var answer = await unitOfWork.Answers.GetByIdAsync(Id);
+            return answer;
+        }
+
+        public async Task<string> EditAsync(Answer answer)
+        {
+            try
+            {
+                unitOfWork.Answers.Update(answer);
+                await unitOfWork.SaveChangesAsync();
+                return "Success";
+            }
+            catch (Exception ex)
+            {
+                Debug.WriteLine(ex.Message);
+                return "Falied";
+            }
+        }
+
+
     }
 }

@@ -2,7 +2,10 @@
 using MediatR;
 using Microsoft.Extensions.DependencyInjection;
 using System.Reflection;
+using TripleA.Core.Bases;
 using TripleA.Core.Behaviors;
+using TripleA.Core.Features.Question.Commands.Handlers;
+using TripleA.Core.Features.Question.Commands.Models;
 
 namespace TripleA.Core
 {
@@ -20,6 +23,8 @@ namespace TripleA.Core
             services.AddValidatorsFromAssembly(Assembly.GetExecutingAssembly());
             // 
             services.AddTransient(typeof(IPipelineBehavior<,>), typeof(ValidationBehavior<,>));
+
+
 
 
 

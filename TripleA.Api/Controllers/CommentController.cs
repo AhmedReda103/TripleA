@@ -1,6 +1,9 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
 using TripleA.Api.Base;
+using TripleA.Core.Features.Comment.Commands.Models;
 using TripleA.Core.Features.Comment.Models;
+using TripleA.Core.Features.Comment.Queries.Model;
 
 namespace TripleA.Api.Controllers
 {
@@ -9,6 +12,12 @@ namespace TripleA.Api.Controllers
     [ApiController]
     public class CommentController : AppControllerBase
     {
+        [HttpPost("/addComment")]
+        [Authorize]
+        public async Task<IActionResult> Add([FromBody]AddCommentCommand command)
+        {
+            return NewResult(await Mediator.Send (command));
+        }
 
         [HttpPost("/deleteComment")]
         //[Authorize]
@@ -23,5 +32,21 @@ namespace TripleA.Api.Controllers
             var response = await Mediator.Send(command);
             return NewResult(response);
         }
+
+
+        [HttpGet("{id}")]
+        //[Authorize]
+        public async Task<IActionResult> GetCommentById(int id)
+        {
+            var response = await Mediator.Send(new GetCommentByIdQuery { Id = id });
+
+            if (!response.Succeeded)
+            {
+                return NotFound(response);
+            }
+
+            return NewResult(response);
+        }
+
     }
 }

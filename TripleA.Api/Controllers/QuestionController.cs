@@ -1,7 +1,8 @@
-﻿using Microsoft.AspNetCore.Authorization;
-using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Mvc;
 using TripleA.Api.Base;
+using TripleA.Core.Features.Category.queries.Model;
 using TripleA.Core.Features.Question.Commands.Models;
+using TripleA.Core.Features.Question.Queries.Model;
 
 namespace TripleA.Api.Controllers
 {
@@ -9,8 +10,16 @@ namespace TripleA.Api.Controllers
     [ApiController]
     public class QuestionController : AppControllerBase
     {
-        [HttpPost("/AddQuestion")]
+        [HttpGet("{id}")]
         [Authorize]
+        public async Task<IActionResult> Get(int id)
+        {
+            return NewResult(await Mediator.Send(new GetQuestionsByIdQuery {QuestionId=id }));
+        }
+
+
+        [HttpPost("/AddQuestion")]
+        //[Authorize]
         public async Task<IActionResult> Create([FromForm] AddQuestionCommand command)
         {
             return NewResult(await Mediator.Send(command));
@@ -22,5 +31,14 @@ namespace TripleA.Api.Controllers
         {
             return NewResult(await Mediator.Send(new DeleteQuestionCommand(id)));
         }
+
+        [HttpPut("/editQuestion")]
+        public async Task<IActionResult> Edit(EditQuestionCommand command)
+        {
+            var response = await Mediator.Send(command);
+            return NewResult(response);
+        }
+
+
     }
 }

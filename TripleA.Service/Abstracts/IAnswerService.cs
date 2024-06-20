@@ -14,6 +14,8 @@ namespace TripleA.Service.Abstracts
         Task DownVote(Answer answer);
         public Task<string> DeleteAsync(Answer answer);
         Task<string> getReplyerIdOfAnswer(int answerId);
+        Task<Answer> GetAnswerByIdAsync(int Id);
+        public Task<string> EditAsync(Answer answer);
 
     }
 }

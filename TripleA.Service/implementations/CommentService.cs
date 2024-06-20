@@ -1,4 +1,9 @@
-﻿using System.Diagnostics;
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
+using System.Diagnostics;
 using TripleA.Data.Entities;
 using TripleA.Infrustructure.unitOfWork;
 using TripleA.Service.Abstracts;
@@ -7,13 +12,20 @@ namespace TripleA.Service.implementations
 {
     public class CommentService : ICommentService
     {
-
         private readonly IUnitOfWork _unitOfWork;
 
         public CommentService(IUnitOfWork unitOfWork)
         {
-            _unitOfWork = unitOfWork;
+            this._unitOfWork = unitOfWork;
         }
+
+        public async Task<string> AddComment(Comment comment)
+        {
+            await _unitOfWork.Comments.AddAsync(comment);
+            await _unitOfWork.SaveChangesAsync();
+            return "Added";
+        }
+
 
         public async Task<string> DeleteAsync(Comment comment)
         {
