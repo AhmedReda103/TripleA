@@ -8,6 +8,7 @@ using System.Text;
 using System.Threading.Tasks;
 using TripleA.Core.Bases;
 using TripleA.Core.Features.Comment.Commands.Models;
+using TripleA.Core.Features.Comment.Models;
 using TripleA.Core.Resources;
 using TripleA.Service.Abstracts;
 using TripleA.Service.implementations;

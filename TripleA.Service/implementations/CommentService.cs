@@ -12,17 +12,17 @@ namespace TripleA.Service.implementations
 {
     public class CommentService : ICommentService
     {
-        private readonly IUnitOfWork unitOfWork;
+        private readonly IUnitOfWork _unitOfWork;
 
         public CommentService(IUnitOfWork unitOfWork)
         {
-            this.unitOfWork = unitOfWork;
+            this._unitOfWork = unitOfWork;
         }
 
         public async Task<string> AddComment(Comment comment)
         {
-            await unitOfWork.Comments.AddAsync(comment);
-            await unitOfWork.SaveChangesAsync();
+            await _unitOfWork.Comments.AddAsync(comment);
+            await _unitOfWork.SaveChangesAsync();
             return "Added";
         }
 
