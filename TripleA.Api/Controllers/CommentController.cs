@@ -16,5 +16,12 @@ namespace TripleA.Api.Controllers
         {
             return NewResult(await Mediator.Send(new DeleteCommentCommand(id)));
         }
+
+        [HttpPut("/editComment")]
+        public async Task<IActionResult> Edit([FromBody] EditCommentCommand command)
+        {
+            var response = await Mediator.Send(command);
+            return NewResult(response);
+        }
     }
 }
