@@ -1,5 +1,6 @@
 ﻿using AutoMapper;
 using TripleA.Core.Features.Answers.Commands.Models;
+using TripleA.Core.Features.Answers.Queries.Dtos;
 using TripleA.Data.Entities;
 
 namespace TripleA.Core.mapping.Answers
