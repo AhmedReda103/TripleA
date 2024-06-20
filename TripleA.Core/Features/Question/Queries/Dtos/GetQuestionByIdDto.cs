@@ -4,7 +4,7 @@ using System.ComponentModel.DataAnnotations.Schema;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using TripleA.Core.Features.Answers.Queries;
+using TripleA.Core.Features.Answers.Queries.Dtos;
 using TripleA.Core.Features.Comment.Queries.Dtos;
 using TripleA.Core.wrappers;
 using TripleA.Data.Entities;

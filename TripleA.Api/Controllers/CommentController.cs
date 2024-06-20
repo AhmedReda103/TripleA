@@ -1,6 +1,7 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using TripleA.Api.Base;
 using TripleA.Core.Features.Comment.Models;
+using TripleA.Core.Features.Comment.Queries.Model;
 
 namespace TripleA.Api.Controllers
 {
@@ -23,5 +24,21 @@ namespace TripleA.Api.Controllers
             var response = await Mediator.Send(command);
             return NewResult(response);
         }
+
+
+        [HttpGet("{id}")]
+        //[Authorize]
+        public async Task<IActionResult> GetCommentById(int id)
+        {
+            var response = await Mediator.Send(new GetCommentByIdQuery { Id = id });
+
+            if (!response.Succeeded)
+            {
+                return NotFound(response);
+            }
+
+            return NewResult(response);
+        }
+
     }
 }

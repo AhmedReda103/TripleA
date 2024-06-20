@@ -2,6 +2,7 @@
 using Microsoft.AspNetCore.Mvc;
 using TripleA.Api.Base;
 using TripleA.Core.Features.Answers.Commands.Models;
+using TripleA.Core.Features.Answers.Queries.Model;
 
 namespace TripleA.Api.Controllers
 {
@@ -38,5 +39,19 @@ namespace TripleA.Api.Controllers
             return NewResult(await Mediator.Send(new DeleteAnswerCommand(id)));
         }
 
+
+        [HttpGet("{id}")]
+        //[Authorize]
+        public async Task<IActionResult> GetAnswerById(int id)
+        {
+            var response = await Mediator.Send(new GetAnswerByIdQuery { Id = id });
+
+            if (!response.Succeeded)
+            {
+                return NotFound(response);
+            }
+
+            return NewResult(response);
+        }
     }
 }
