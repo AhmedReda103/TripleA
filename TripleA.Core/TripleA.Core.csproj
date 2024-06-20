@@ -24,7 +24,6 @@
   </ItemGroup>
 
   <ItemGroup>
-    <Folder Include="Features\Category\commands\" />
     <Folder Include="Features\Category\validator\" />
   </ItemGroup>
 

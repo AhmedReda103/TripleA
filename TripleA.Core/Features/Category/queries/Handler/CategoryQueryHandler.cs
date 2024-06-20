@@ -11,6 +11,7 @@ using TripleA.Service.Abstracts;
 namespace TripleA.Core.Features.Category.queries.Handler
 {
     public class CategoryQueryHandler : ResponseHandler,
+                                                    IRequestHandler<GetCategoryListQuery, Response<List<GetCategoryListDto>>>,
                                                     IRequestHandler<GetQuestionsByCategoryIdPaginatedQuery, Response<PaginatedResult<GetQuestionsByCategoryIdPaginatedResponse>>>
 
     {
@@ -33,6 +34,14 @@ namespace TripleA.Core.Features.Category.queries.Handler
             var PaginatedList = await mapper.ProjectTo<GetQuestionsByCategoryIdPaginatedResponse>(JoinQueryRes).ToPaginatedListAsync(request.PageNumber, request.PageSize);
 
             return Success(PaginatedList);
+        }
+
+        public async Task<Response<List<GetCategoryListDto>>> Handle(GetCategoryListQuery request, CancellationToken cancellationToken)
+        {
+            var categoryList = await categoryService.GetCategoryListAsync();
+            var categoryMapper = mapper.Map<List<GetCategoryListDto>>(categoryList);
+            var result = Success(categoryMapper);
+            return result;
         }
     }
 }
