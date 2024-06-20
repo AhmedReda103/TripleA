@@ -2,8 +2,6 @@
 using MediatR;
 using TripleA.Core.Bases;
 using TripleA.Core.Features.Question.Commands.Models;
-using TripleA.Core.Features.Question.Queries.Dtos;
-using TripleA.Core.Features.Question.Queries.Model;
 using TripleA.Service.Abstracts;
 
 namespace TripleA.Core.Features.Question.Commands.Handlers
@@ -49,12 +47,17 @@ namespace TripleA.Core.Features.Question.Commands.Handlers
         public async Task<Response<string>> Handle(DeleteQuestionCommand request, CancellationToken cancellationToken)
         {
             var question = await questionService.GetByIDAsync(request.Id);
-            if (question == null) 
+            if (question == null)
                 return NotFound<string>();
             // Call service that make Delete
             var result = await questionService.DeleteAsync(question);
             if (result == "Success") return Deleted<string>();
             else return BadRequest<string>();
+        }
+
+        public Task<Response<string>> Handle(EditQuestionCommand request, CancellationToken cancellationToken)
+        {
+            throw new NotImplementedException();
         }
     }
 }
