@@ -9,6 +9,7 @@ namespace TripleA.Core.mapping.Comments
     {
         public CommentProfile()
         {
+
             CreateMap<EditCommentCommand,TripleA.Data.Entities.Comment>();
             CreateMap<TripleA.Data.Entities.Comment, CommentDto>();
             CreateMap<TripleA.Data.Entities.Comment, GetCommentByIdDto>()
