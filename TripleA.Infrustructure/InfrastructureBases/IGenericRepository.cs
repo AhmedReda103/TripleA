@@ -30,5 +30,6 @@ namespace TripleA.Infrustructure.InfrastructureBases
         Task<IDbContextTransaction> BeginTransactionAsync();
         Task CommitAsync();
         Task RollBackAsync();
+
     }
 }
