@@ -1,11 +1,6 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using TripleA.Core.Features.Comment.Queries.Dtos;
+﻿using TripleA.Core.Features.Comment.Queries.Dtos;
 
-namespace TripleA.Core.Features.Answers.Queries
+namespace TripleA.Core.Features.Answers.Queries.Dtos
 {
     public class AnswerDto
     {
