@@ -15,6 +15,7 @@ namespace TripleA.Core.Features.Answers.Commands.Handler
                                         IRequestHandler<DownVoteAnswerCommand, Response<string>>,
                                         IRequestHandler<DeleteAnswerCommand, Response<string>>
 
+
     {
         private readonly IMapper mapper;
         private readonly IAnswerService answerService;
@@ -78,5 +79,9 @@ namespace TripleA.Core.Features.Answers.Commands.Handler
             if (result == "Success") return Deleted<string>();
             else return BadRequest<string>();
         }
+
+
+
+
     }
 }

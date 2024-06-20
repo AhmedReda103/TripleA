@@ -2,6 +2,8 @@
 using MediatR;
 using TripleA.Core.Bases;
 using TripleA.Core.Features.Question.Commands.Models;
+using TripleA.Core.Features.Question.Queries.Dtos;
+using TripleA.Core.Features.Question.Queries.Model;
 using TripleA.Service.Abstracts;
 
 namespace TripleA.Core.Features.Question.Commands.Handlers
@@ -9,19 +11,25 @@ namespace TripleA.Core.Features.Question.Commands.Handlers
     public class QuestionCommandHandler : ResponseHandler,
                                           IRequestHandler<AddQuestionCommand, Response<string>>
                                           , IRequestHandler<DeleteQuestionCommand, Response<string>>
+                                          , IRequestHandler<EditQuestionCommand, Response<string>>
     {
         private readonly IMapper mapper;
         private readonly IQuestionService questionService;
         private readonly IApplicationUserService applicationUserService;
+        private readonly IFileService fileService;
+
 
         public QuestionCommandHandler(IMapper mapper,
                                       IQuestionService questionService,
-                                      IApplicationUserService applicationUserService)
+                                      IApplicationUserService applicationUserService,
+                                      IFileService fileService)
         {
             this.mapper = mapper;
             this.questionService = questionService;
             this.applicationUserService = applicationUserService;
+            this.fileService = fileService;
         }
+
         public async Task<Response<string>> Handle(AddQuestionCommand request, CancellationToken cancellationToken)
         {
             var QuestionMapper = mapper.Map<TripleA.Data.Entities.Question>(request);
@@ -41,9 +49,9 @@ namespace TripleA.Core.Features.Question.Commands.Handlers
         public async Task<Response<string>> Handle(DeleteQuestionCommand request, CancellationToken cancellationToken)
         {
             var question = await questionService.GetByIDAsync(request.Id);
-            //return NotFound
-            if (question == null) return NotFound<string>();
-            //Call service that make Delete
+            if (question == null) 
+                return NotFound<string>();
+            // Call service that make Delete
             var result = await questionService.DeleteAsync(question);
             if (result == "Success") return Deleted<string>();
             else return BadRequest<string>();

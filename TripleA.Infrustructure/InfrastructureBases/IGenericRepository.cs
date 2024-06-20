@@ -18,6 +18,7 @@ namespace TripleA.Infrustructure.InfrastructureBases
         Task<T> AddAsync(T entity);
         Task<IEnumerable<T>> AddRangeAsync(IEnumerable<T> entities);
         T Update(T entity);
+        Task UpdateAsync(T entity);
         void Delete(T entity);
         void DeleteRange(IEnumerable<T> entities);
         int Count();
@@ -30,5 +31,6 @@ namespace TripleA.Infrustructure.InfrastructureBases
         Task<IDbContextTransaction> BeginTransactionAsync();
         Task CommitAsync();
         Task RollBackAsync();
+
     }
 }

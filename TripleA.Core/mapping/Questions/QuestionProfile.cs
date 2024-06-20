@@ -1,10 +1,4 @@
 ﻿using AutoMapper;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using TripleA.Data.Entities.Identity;
 using TripleA.Core.Features.Question.Commands.Models;
 using TripleA.Data.Entities;
 
@@ -15,7 +9,10 @@ namespace TripleA.Core.mapping.Questions
         public QuestionProfile()
         {
             CreateMap<AddQuestionCommand, Question>();
+
+            CreateMap<EditQuestionCommand, Question>()
+                .ForMember(des => des.Image, opt => opt.MapFrom(src => src.ImagePath));
         }
-       
+
     }
 }

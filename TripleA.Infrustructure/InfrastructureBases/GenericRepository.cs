@@ -98,6 +98,13 @@ namespace TripleA.Infrustructure.InfrastructureBases
             return entity;
         }
 
+        public virtual async Task UpdateAsync(T entity)
+        {
+            _context.Set<T>().Update(entity);
+            await _context.SaveChangesAsync();
+
+        }
+
         public void Delete(T entity)
         {
             _context.Set<T>().Remove(entity);

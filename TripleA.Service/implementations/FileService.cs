@@ -1,5 +1,8 @@
 ﻿using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Http;
+using Microsoft.Extensions.Logging;
+using System.Diagnostics;
+using TripleA.Data.Entities;
 using TripleA.Service.Abstracts;
 
 namespace TripleA.Service.implementations
@@ -7,10 +10,16 @@ namespace TripleA.Service.implementations
     public class FileService : IFileService
     {
         private readonly IWebHostEnvironment _webHostEnvironment;
-        public FileService(IWebHostEnvironment webHostEnvironment)
+
+        //private readonly ILogger<FileService> _logger;
+
+        public FileService(IWebHostEnvironment webHostEnvironment, ILogger<FileService> logger)
         {
             _webHostEnvironment = webHostEnvironment;
+            //_logger = logger;
         }
+
+
         public async Task<string> UploadFile(string location, IFormFile? file)
         {
             if (file == null)
@@ -45,6 +54,45 @@ namespace TripleA.Service.implementations
             else
             {
                 return "NoFile";
+            }
+        }
+
+
+        public bool DeleteFile(string filePath)
+        {
+            try
+            {
+                if (File.Exists(filePath))
+                {
+                    File.Delete(filePath);
+                    //_logger.LogInformation($"File deleted: {filePath}");
+                    Debug.WriteLine($"File deleted: {filePath}");
+                    return true;
+                }
+                else
+                {
+                    //_logger.LogWarning($"File not found: {filePath}");
+                    Debug.WriteLine($"File not found: {filePath}");
+                    return false;
+                }
+            }
+            catch (Exception ex)
+            {
+                //_logger.LogError(ex, $"Error deleting file: {filePath}");
+                Debug.WriteLine($"Error deleting file:  {filePath}");
+                return false;
+            }
+        }
+
+        public void SetQuestionFilePath(string fileUrl, Question question)
+        {
+            if (fileUrl == "NoFile" || fileUrl == "FailedToUploadFile")
+            {
+                question.Image = fileUrl;
+            }
+            else
+            {
+                question.Image = fileUrl;
             }
         }
     }

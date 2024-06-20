@@ -1,4 +1,5 @@
 ﻿using Microsoft.IdentityModel.Tokens;
+using System.Diagnostics;
 using TripleA.Data.Entities;
 using TripleA.Infrustructure.unitOfWork;
 using TripleA.Service.Abstracts;
@@ -19,6 +20,32 @@ namespace TripleA.Service.implementations
             await unitOfWork.Categories.AddAsync(category);
             await unitOfWork.SaveChangesAsync();
             return "Added";
+        }
+
+        public async Task<string> DeleteCategoryAsync(Category category)
+        {
+
+            var trans = unitOfWork.Categories.BeginTransaction();
+            try
+            {
+                unitOfWork.Categories.Delete(category);
+                await unitOfWork.SaveChangesAsync();
+                await trans.CommitAsync();
+                return "Success";
+            }
+            catch (Exception ex)
+            {
+                await trans.RollbackAsync();
+                Debug.WriteLine(ex.Message);
+                return "Falied";
+            }
+        }
+
+        public async Task<string> EditCategoryAsync(Category category)
+        {
+            await unitOfWork.Categories.UpdateAsync(category);
+            await unitOfWork.SaveChangesAsync();
+            return "Success";
         }
 
         public IQueryable<Category> FilliterCategoriesPaginatedQuerable(string search)

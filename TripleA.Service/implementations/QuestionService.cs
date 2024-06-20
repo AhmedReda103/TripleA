@@ -20,13 +20,10 @@ namespace TripleA.Service.implementations
         }
         public async Task<string> AddQuestion(Question question, IFormFile file)
         {
+
             var fileUrl = await fileService.UploadFile("Question", file);
-            switch (fileUrl)
-            {
-                case "NoFile": return "NoFile";
-                case "FailedToUploadFile": return "FailedToUploadFile";
-            }
-            question.Image = fileUrl;
+
+            fileService.SetQuestionFilePath(fileUrl, question);
 
             await _unitOfWork.Questions.AddAsync(question);
             await _unitOfWork.SaveChangesAsync();
@@ -51,10 +48,27 @@ namespace TripleA.Service.implementations
             }
         }
 
+        public async Task<string> EditAsync(Question question)
+        {
+            try
+            {
+                _unitOfWork.Questions.Update(question);
+                await _unitOfWork.SaveChangesAsync();
+                return "Success";
+            }
+            catch (Exception ex)
+            {
+                Debug.WriteLine(ex.Message);
+                return "Falied";
+            }
+        }
+
+
         public async Task<Question> GetByIDAsync(int id)
         {
             var question = await _unitOfWork.Questions.GetByIdAsync(id);
             return question;
         }
+
     }
 }

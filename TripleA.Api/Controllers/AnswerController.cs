@@ -2,6 +2,7 @@
 using Microsoft.AspNetCore.Mvc;
 using TripleA.Api.Base;
 using TripleA.Core.Features.Answers.Commands.Models;
+using TripleA.Core.Features.Answers.Queries.Model;
 
 namespace TripleA.Api.Controllers
 {
@@ -10,7 +11,7 @@ namespace TripleA.Api.Controllers
     public class AnswerController : AppControllerBase
     {
         [HttpPost("/AddAnswer")]
-        [Authorize]
+        //[Authorize]
         public async Task<IActionResult> Create([FromForm] AddAnswerCommand command)
         {
             return NewResult(await Mediator.Send(command));
@@ -36,6 +37,27 @@ namespace TripleA.Api.Controllers
         public async Task<IActionResult> Delete(int id)
         {
             return NewResult(await Mediator.Send(new DeleteAnswerCommand(id)));
+        }
+
+
+        [HttpGet("{id}")]
+        //[Authorize]
+        public async Task<IActionResult> GetAnswerById(int id)
+        {
+            var response = await Mediator.Send(new GetAnswerByIdQuery { Id = id });
+
+            if (!response.Succeeded)
+            {
+                return NotFound(response);
+            }
+
+            return NewResult(response);
+        }
+        [HttpPut("/editAnswer")]
+        public async Task<IActionResult> Edit(EditAnswerCommand command)
+        {
+            var response = await Mediator.Send(command);
+            return NewResult(response);
         }
 
     }

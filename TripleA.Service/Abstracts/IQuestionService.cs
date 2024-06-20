@@ -8,6 +8,6 @@ namespace TripleA.Service.Abstracts
         Task<string> AddQuestion(Question question, IFormFile file);
         public Task<string> DeleteAsync(Question question);
         public Task<Question> GetByIDAsync(int id);
-
+        public Task<string> EditAsync(Question question);
     }
 }

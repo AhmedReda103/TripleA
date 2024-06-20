@@ -16,12 +16,13 @@ namespace TripleA.Infrustructure.unitOfWork
         public IQuestionRepository Questions { get; }
 
         public IAnswerRepository Answers { get; }
+        public ICommentRepository Comments { get; }
+
 
         public ICategoryRepository Categories { get; }
 
         public IUserRepository Users { get; }
 
-        public ICommentRepository Comments { get; }
 
         public UnitOfWork(
             ApplicationDbContext context,
