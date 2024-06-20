@@ -22,19 +22,25 @@ namespace TripleA.Core.Features.Comment.Commands.Handler
     {
 
         private readonly IMapper mapper;
+        private readonly IApplicationUserService applicationUserService;
         private readonly ICommentService commentService;
 
+
         public CommentCommandHandler(IMapper mapper,
-                                    ICommentService commentService
+                                     IApplicationUserService applicationUserService,
+                                     ICommentService commentService
                                     )
         {
             this.mapper = mapper;
+            this.applicationUserService = applicationUserService;
             this.commentService = commentService;          
         }
 
         public async Task<Response<string>> Handle(AddCommentCommand request, CancellationToken cancellationToken)
         {
-            var CommentMapper = mapper.Map<TripleA.Data.Entities.Comment>(request);            
+            var CommentMapper = mapper.Map<TripleA.Data.Entities.Comment>(request);
+            var UserId = await applicationUserService.getUserIdAsync();
+            CommentMapper.UserId = UserId;
             CommentMapper.CreatedIn = DateTime.Now;
             var result = await commentService.AddComment(CommentMapper);            
             if (result == "Added")
@@ -42,7 +48,6 @@ namespace TripleA.Core.Features.Comment.Commands.Handler
                 return Created("");
             }
             else return BadRequest<string>();
-            throw new NotImplementedException();
         }
 
         public async Task<Response<string>> Handle(DeleteCommentCommand request, CancellationToken cancellationToken)

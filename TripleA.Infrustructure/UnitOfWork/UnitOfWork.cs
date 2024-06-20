@@ -23,7 +23,6 @@ namespace TripleA.Infrustructure.unitOfWork
 
         public IUserRepository Users { get; }
 
-     
 
         public UnitOfWork(
             ApplicationDbContext context,
