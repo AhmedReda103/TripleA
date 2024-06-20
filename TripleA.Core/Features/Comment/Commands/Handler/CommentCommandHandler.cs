@@ -16,9 +16,9 @@ using TripleA.Service.implementations;
 namespace TripleA.Core.Features.Comment.Commands.Handler
 {
     public class CommentCommandHandler : ResponseHandler,
-                                                         IRequestHandler<AddCommentCommand, Response<String>>
-                                                         ,IRequestHandler<DeleteCommentCommand, Response<string>>
-                                                          ,IRequestHandler<EditCommentCommand, Response<string>>
+                                         IRequestHandler<AddCommentCommand, Response<string>>,
+                                         IRequestHandler<DeleteCommentCommand, Response<string>>,
+                                         IRequestHandler<EditCommentCommand, Response<string>>
     {
 
         private readonly IMapper mapper;
