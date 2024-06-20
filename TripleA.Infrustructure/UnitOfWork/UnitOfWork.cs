@@ -16,6 +16,8 @@ namespace TripleA.Infrustructure.unitOfWork
         public IQuestionRepository Questions { get; }
 
         public IAnswerRepository Answers { get; }
+        public ICommentRepository Comments { get; }
+
 
         public ICategoryRepository Categories { get; }
 
