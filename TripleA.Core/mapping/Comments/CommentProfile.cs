@@ -11,6 +11,9 @@ namespace TripleA.Core.mapping.Comments
         {
             CreateMap<EditCommentCommand, Comment>();
             CreateMap<Comment, CommentDto>();
+            CreateMap<Comment, GetCommentByIdDto>()
+               .ForMember(des => des.AnswerId, opt => opt.MapFrom(src => src.Answer.Id))
+              .ForMember(des => des.UserName, opt => opt.MapFrom(src => src.user.UserName));
         }
     }
 }
