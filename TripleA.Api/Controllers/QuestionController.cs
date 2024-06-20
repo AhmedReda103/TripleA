@@ -15,7 +15,7 @@ namespace TripleA.Api.Controllers
         [Authorize]
         public async Task<IActionResult> Get(int id)
         {
-            return NewResult(await Mediator.Send(new GetQuestionsById {QuestionId=id }));
+            return NewResult(await Mediator.Send(new GetQuestionsByIdQuery {QuestionId=id }));
         }
 
 

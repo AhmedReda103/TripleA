@@ -4,6 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using TripleA.Core.Features.Comment.Queries.Dtos;
+using TripleA.Core.wrappers;
 
 namespace TripleA.Core.Features.Answers.Queries
 {
@@ -17,6 +18,6 @@ namespace TripleA.Core.Features.Answers.Queries
         public int? QuestionId { get; set; }
         public string? UserId { get; set; }
 
-        public virtual ICollection<CommentDto> Comments { get; set; } = new HashSet<CommentDto>();
+        public virtual PaginatedResult<CommentDto> Comments { get; set; }
     }
 }

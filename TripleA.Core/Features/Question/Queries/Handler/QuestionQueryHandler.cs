@@ -13,7 +13,7 @@ using TripleA.Service.Abstracts;
 namespace TripleA.Core.Features.Question.Queries.Handler
 {
     public class QuestionQueryHandler : ResponseHandler,
-                                        IRequestHandler<GetQuestionsById, Response<GetQuestionByIdDto>>
+                                        IRequestHandler<GetQuestionsByIdQuery, Response<GetQuestionByIdDto>>
     {
         private readonly IMapper mapper;
         private readonly IQuestionService questionService;
@@ -25,7 +25,7 @@ namespace TripleA.Core.Features.Question.Queries.Handler
             this.questionService = questionService;
         }
 
-        public Task<Response<GetQuestionByIdDto>> Handle(GetQuestionsById request, CancellationToken cancellationToken)
+        public Task<Response<GetQuestionByIdDto>> Handle(GetQuestionsByIdQuery request, CancellationToken cancellationToken)
         {
             throw new NotImplementedException();
         }

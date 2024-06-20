@@ -6,6 +6,7 @@ using System.Text;
 using System.Threading.Tasks;
 using TripleA.Core.Features.Answers.Queries;
 using TripleA.Core.Features.Comment.Queries.Dtos;
+using TripleA.Core.wrappers;
 using TripleA.Data.Entities;
 
 namespace TripleA.Core.Features.Question.Queries.Dtos
@@ -19,7 +20,7 @@ namespace TripleA.Core.Features.Question.Queries.Dtos
         public DateTime? CreatedIn { get; set; }
         public int? CategoryId { get; set; }
         public string? UserId { get; set; }
-        public virtual ICollection<AnswerDto> Answers { get; set; } = new HashSet<AnswerDto>();
+        public virtual PaginatedResult<AnswerDto> Answers { get; set; } 
        
     }
 }
