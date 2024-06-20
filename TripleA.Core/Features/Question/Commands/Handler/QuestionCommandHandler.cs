@@ -10,8 +10,8 @@ namespace TripleA.Core.Features.Question.Commands.Handlers
 {
     public class QuestionCommandHandler : ResponseHandler,
                                           IRequestHandler<AddQuestionCommand, Response<string>>,
-                                          IRequestHandler<DeleteQuestionCommand, Response<string>>,
-                                          IRequestHandler<GetQuestionsByIdQuery,Response<GetQuestionByIdDto>>
+                                          IRequestHandler<DeleteQuestionCommand, Response<string>>
+                                       
     {
         private readonly IMapper mapper;
         private readonly IQuestionService questionService;
@@ -44,17 +44,14 @@ namespace TripleA.Core.Features.Question.Commands.Handlers
         public async Task<Response<string>> Handle(DeleteQuestionCommand request, CancellationToken cancellationToken)
         {
             var question = await questionService.GetByIDAsync(request.Id);
-            //return NotFound
+            return NotFound<string>();
             if (question == null) return NotFound<string>();
-            //Call service that make Delete
+            // Call service that make Delete
             var result = await questionService.DeleteAsync(question);
             if (result == "Success") return Deleted<string>();
             else return BadRequest<string>();
         }
 
-        public Task<Response<GetQuestionByIdDto>> Handle(GetQuestionsByIdQuery request, CancellationToken cancellationToken)
-        {
-            throw new NotImplementedException();
-        }
+      
     }
 }
