@@ -44,8 +44,8 @@ namespace TripleA.Core.Features.Question.Commands.Handlers
         public async Task<Response<string>> Handle(DeleteQuestionCommand request, CancellationToken cancellationToken)
         {
             var question = await questionService.GetByIDAsync(request.Id);
-            return NotFound<string>();
-            if (question == null) return NotFound<string>();
+            if (question == null) 
+                return NotFound<string>();
             // Call service that make Delete
             var result = await questionService.DeleteAsync(question);
             if (result == "Success") return Deleted<string>();
