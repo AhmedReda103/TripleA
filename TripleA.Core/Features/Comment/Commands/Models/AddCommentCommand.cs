@@ -11,5 +11,6 @@ namespace TripleA.Core.Features.Comment.Commands.Models
     public class AddCommentCommand : IRequest<Response<String>>
     {
         public string Content { get; set; }
+        public int AnswerId { get; set; }
     }
 }

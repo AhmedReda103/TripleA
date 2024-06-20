@@ -9,9 +9,9 @@ namespace TripleA.Core.mapping.Comments
     {
         public CommentProfile()
         {
-            CreateMap<EditCommentCommand, Comment>();
-            CreateMap<Comment, CommentDto>();
-            CreateMap<Comment, GetCommentByIdDto>()
+            CreateMap<EditCommentCommand,TripleA.Data.Entities.Comment>();
+            CreateMap<TripleA.Data.Entities.Comment, CommentDto>();
+            CreateMap<TripleA.Data.Entities.Comment, GetCommentByIdDto>()
                .ForMember(des => des.AnswerId, opt => opt.MapFrom(src => src.Answer.Id))
               .ForMember(des => des.UserName, opt => opt.MapFrom(src => src.user.UserName));
         }
