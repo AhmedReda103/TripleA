@@ -36,10 +36,10 @@ namespace TripleA.Core.Features.Answers.Commands.Handler
             var AnswerMapper = mapper.Map<TripleA.Data.Entities.Answer>(request);
             var UserId = await applicationUserService.getUserIdAsync();  //ADD two roles then use ord. userid
             AnswerMapper.UserId = UserId;
-
+            AnswerMapper.CreatedIn = DateTime.Now;
             var result = await answerService.AddAnswer(AnswerMapper, request.Image);
 
-            AnswerMapper.CreatedIn = DateTime.Now;
+      
             var AskerId = AnswerMapper?.Question?.UserId;
             if (result == "Added")
             {
