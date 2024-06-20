@@ -33,6 +33,21 @@ namespace TripleA.Service.implementations
             }
         }
 
+        public async Task<string> EditAsync(Comment comment)
+        {
+            try
+            {
+                _unitOfWork.Comments.Update(comment);
+                await _unitOfWork.SaveChangesAsync();
+                return "Success";
+            }
+            catch (Exception ex)
+            {
+                Debug.WriteLine(ex.Message);
+                return "Falied";
+            }
+        }
+
         public async Task<Comment> GetCommentByIDAsync(int id)
         {
             var comment = await _unitOfWork.Comments.GetByIdAsync(id);
