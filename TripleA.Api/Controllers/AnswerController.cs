@@ -1,9 +1,8 @@
 ﻿using Microsoft.AspNetCore.Authorization;
-using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using TripleA.Api.Base;
 using TripleA.Core.Features.Answers.Commands.Models;
-using TripleA.Core.Features.Question.Commands.Models;
+using TripleA.Core.Features.Answers.Queries.Model;
 
 namespace TripleA.Api.Controllers
 {
@@ -13,7 +12,7 @@ namespace TripleA.Api.Controllers
     {
         [HttpPost("/AddAnswer")]
         [Authorize]
-        public async Task<IActionResult> Create([FromBody] AddAnswerCommand command)
+        public async Task<IActionResult> Create([FromForm] AddAnswerCommand command)
         {
             return NewResult(await Mediator.Send(command));
         }
@@ -23,7 +22,7 @@ namespace TripleA.Api.Controllers
         [Authorize]
         public async Task<IActionResult> UpVote(int answerId)
         {
-            return NewResult(await Mediator.Send(new UpVoteAnswerCommand {AnswerId=answerId}));
+            return NewResult(await Mediator.Send(new UpVoteAnswerCommand { AnswerId = answerId }));
         }
 
         [HttpPost("downvote/{answerId}")]
@@ -31,6 +30,28 @@ namespace TripleA.Api.Controllers
         public async Task<IActionResult> DownVote(int answerId)
         {
             return NewResult(await Mediator.Send(new DownVoteAnswerCommand { AnswerId = answerId }));
+        }
+
+        [HttpPost("/deleteAnswer")]
+        //[Authorize]
+        public async Task<IActionResult> Delete(int id)
+        {
+            return NewResult(await Mediator.Send(new DeleteAnswerCommand(id)));
+        }
+
+
+        [HttpGet("{id}")]
+        //[Authorize]
+        public async Task<IActionResult> GetAnswerById(int id)
+        {
+            var response = await Mediator.Send(new GetAnswerByIdQuery { Id = id });
+
+            if (!response.Succeeded)
+            {
+                return NotFound(response);
+            }
+
+            return NewResult(response);
         }
     }
 }

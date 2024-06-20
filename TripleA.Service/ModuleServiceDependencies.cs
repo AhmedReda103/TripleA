@@ -18,6 +18,9 @@ namespace TripleA.Service
 
             services.AddTransient<IFileService, FileService>();
 
+            services.AddTransient<ICategoryService, CategoryService>();
+
+
             return services;
         }
     }

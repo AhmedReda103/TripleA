@@ -1,5 +1,4 @@
 ﻿using Microsoft.AspNetCore.Identity;
-using TripleA.Data.Entities;
 using TripleA.Data.Entities.Identity;
 using TripleA.Infrustructure.Abstractions;
 using TripleA.Infrustructure.Context;
@@ -20,6 +19,12 @@ namespace TripleA.Infrustructure.unitOfWork
         public ICommentRepository Comments { get; }
 
 
+        public ICategoryRepository Categories { get; }
+
+        public IUserRepository Users { get; }
+
+        public ICommentRepository Comments { get; }
+
         public UnitOfWork(
             ApplicationDbContext context,
             UserManager<User> userManager,
@@ -31,8 +36,9 @@ namespace TripleA.Infrustructure.unitOfWork
             _roleManager = roleManager;
             Questions = new QuestionRepository(_context);
             Answers = new AnswerRepository(_context);
+            Categories = new CategoryRepository(_context);
+            Users = new UserRepository(_context);
             Comments = new CommentRepository(_context);
-
         }
 
 

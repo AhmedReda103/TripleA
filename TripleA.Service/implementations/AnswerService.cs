@@ -1,10 +1,7 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+
+using Microsoft.AspNetCore.Http;
+using System.Diagnostics;
 using TripleA.Data.Entities;
-using TripleA.Infrustructure.Abstractions;
 using TripleA.Infrustructure.unitOfWork;
 using TripleA.Service.Abstracts;
 
@@ -14,13 +11,23 @@ namespace TripleA.Service.implementations
     public class AnswerService : IAnswerService
     {
         private readonly IUnitOfWork unitOfWork;
+        private readonly IFileService fileService;
 
-        public AnswerService(IUnitOfWork unitOfWork)
+        public AnswerService(IUnitOfWork unitOfWork, IFileService fileService)
         {
             this.unitOfWork = unitOfWork;
+            this.fileService = fileService;
         }
-        public async Task<string> AddAnswer(Answer answer)
+        public async Task<string> AddAnswer(Answer answer, IFormFile file)
         {
+            var fileUrl = await fileService.UploadFile("Answer", file);
+            switch (fileUrl)
+            {
+                case "NoFile": return "NoFile";
+                case "FailedToUploadFile": return "FailedToUploadFile";
+            }
+            answer.Image = fileUrl;
+
             await unitOfWork.Answers.AddAsync(answer);
             await unitOfWork.SaveChangesAsync();
             return "Added";
@@ -33,8 +40,8 @@ namespace TripleA.Service.implementations
 
         public async Task Upvote(Answer answer)
         {
-             answer.Votes++;
-             await unitOfWork.SaveChangesAsync();
+            answer.Votes++;
+            await unitOfWork.SaveChangesAsync();
         }
 
         public async Task DownVote(Answer answer)
@@ -42,5 +49,36 @@ namespace TripleA.Service.implementations
             answer.Votes--;
             await unitOfWork.SaveChangesAsync();
         }
+
+        public async Task<string> DeleteAsync(Answer answer)
+        {
+            var trans = unitOfWork.Answers.BeginTransaction();
+            try
+            {
+                unitOfWork.Answers.Delete(answer);
+                await unitOfWork.SaveChangesAsync();
+                await trans.CommitAsync();
+                return "Success";
+            }
+            catch (Exception ex)
+            {
+                await trans.RollbackAsync();
+                Debug.WriteLine(ex.Message);
+                return "Falied";
+            }
+        }
+
+        public async Task<string> getReplyerIdOfAnswer(int answerId)
+        {
+            var answer = await unitOfWork.Answers.GetByIdAsync(answerId);
+            return answer.UserId;
+        }
+
+        public async Task<Answer> GetAnswerByIdAsync(int Id)
+        {
+            var answer = await unitOfWork.Answers.GetByIdAsync(Id);
+            return answer;
+        }
+
     }
 }

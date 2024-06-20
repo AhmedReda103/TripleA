@@ -23,4 +23,8 @@
     <ProjectReference Include="..\TripleA.Service\TripleA.Service.csproj" />
   </ItemGroup>
 
+  <ItemGroup>
+    <Folder Include="Features\Category\validator\" />
+  </ItemGroup>
+
 </Project>

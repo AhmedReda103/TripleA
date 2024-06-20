@@ -290,6 +290,9 @@ namespace TripleA.Infrustructure.Migrations
                         .HasMaxLength(256)
                         .HasColumnType("nvarchar(256)");
 
+                    b.Property<int>("Votes")
+                        .HasColumnType("int");
+
                     b.HasKey("Id");
 
                     b.HasIndex("NormalizedEmail")
@@ -412,7 +415,8 @@ namespace TripleA.Infrustructure.Migrations
                 {
                     b.HasOne("TripleA.Data.Entities.Question", "Question")
                         .WithMany("Answers")
-                        .HasForeignKey("QuestionId");
+                        .HasForeignKey("QuestionId")
+                        .OnDelete(DeleteBehavior.Cascade);
 
                     b.HasOne("TripleA.Data.Entities.Identity.User", "user")
                         .WithMany()
@@ -427,7 +431,8 @@ namespace TripleA.Infrustructure.Migrations
                 {
                     b.HasOne("TripleA.Data.Entities.Answer", "Answer")
                         .WithMany("Comments")
-                        .HasForeignKey("AnswerId");
+                        .HasForeignKey("AnswerId")
+                        .OnDelete(DeleteBehavior.Cascade);
 
                     b.HasOne("TripleA.Data.Entities.Identity.User", "user")
                         .WithMany()

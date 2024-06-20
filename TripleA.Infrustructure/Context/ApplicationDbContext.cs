@@ -21,6 +21,20 @@ namespace TripleA.Infrustructure.Context
         {
 
             base.OnModelCreating(modelBuilder);
+
+            modelBuilder.Entity<Comment>()
+               .HasOne(c => c.Answer)
+               .WithMany(p => p.Comments)
+               .HasForeignKey(c => c.AnswerId)
+               .OnDelete(DeleteBehavior.Cascade);
+
+            modelBuilder.Entity<Answer>()
+               .HasOne(c => c.Question)
+               .WithMany(p => p.Answers)
+               .HasForeignKey(c => c.QuestionId)
+               .OnDelete(DeleteBehavior.Cascade);
+
+
         }
 
         public DbSet<Category> Categories { get; set; }
