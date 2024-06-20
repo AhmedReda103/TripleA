@@ -21,6 +21,8 @@ namespace TripleA.Infrustructure.unitOfWork
 
         public IUserRepository Users { get; }
 
+        public ICommentRepository Comments { get; }
+
         public UnitOfWork(
             ApplicationDbContext context,
             UserManager<User> userManager,
@@ -34,6 +36,7 @@ namespace TripleA.Infrustructure.unitOfWork
             Answers = new AnswerRepository(_context);
             Categories = new CategoryRepository(_context);
             Users = new UserRepository(_context);
+            Comments = new CommentRepository(_context);
         }
 
 

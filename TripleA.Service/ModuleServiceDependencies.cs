@@ -12,6 +12,8 @@ namespace TripleA.Service
 
             services.AddTransient<IQuestionService, QuestionService>();
 
+            services.AddTransient<ICommentService, CommentService>();
+
 
             services.AddTransient<IAnswerService, AnswerService>();
 
