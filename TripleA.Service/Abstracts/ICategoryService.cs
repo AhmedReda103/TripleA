@@ -10,6 +10,8 @@ namespace TripleA.Service.Abstracts
         public Task<Category> GetCategoryByIdAsync(int id);
 
         public Task<string> AddCategoryAsync(Category category);
+        public Task<string> EditCategoryAsync(Category category);
+        public Task<string> DeleteCategoryAsync(Category category);
 
         public IQueryable<Category> GetCategoriesQuerable();
 
