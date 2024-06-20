@@ -9,7 +9,7 @@ using TripleA.Core.Features.Question.Queries.Dtos;
 
 namespace TripleA.Core.Features.Question.Queries.Model
 {
-    public class GetQuestionsById : IRequest<Response<GetQuestionByIdDto>>
+    public class GetQuestionsByIdQuery : IRequest<Response<GetQuestionByIdDto>>
     {
         public int QuestionId;
     }

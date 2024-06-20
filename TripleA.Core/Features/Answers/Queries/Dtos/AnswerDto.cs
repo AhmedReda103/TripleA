@@ -1,4 +1,4 @@
-﻿using TripleA.Core.Features.Comment.Queries.Dtos;
+using TripleA.Core.Features.Comment.Queries.Dtos;
 
 namespace TripleA.Core.Features.Answers.Queries.Dtos
 {
