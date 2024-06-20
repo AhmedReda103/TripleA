@@ -17,7 +17,7 @@ namespace TripleA.Service.implementations
 
         public async Task<string> DeleteAsync(Comment comment)
         {
-            var trans = _unitOfWork.Questions.BeginTransaction();
+            var trans = _unitOfWork.Comments.BeginTransaction();
             try
             {
                 _unitOfWork.Comments.Delete(comment);
