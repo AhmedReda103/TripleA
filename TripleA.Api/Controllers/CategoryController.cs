@@ -44,5 +44,15 @@ namespace TripleA.Api.Controllers
             return NewResult(await Mediator.Send(new DeleteCategoryCommand(id)));
         }
 
+
+
+        [HttpPut("/EditCategory")]
+        //[Authorize]
+        public async Task<IActionResult> Edit(EditCategoryCommand command)
+        {
+            var response = await Mediator.Send(command);
+            return NewResult(response);
+        }
+
     }
 }

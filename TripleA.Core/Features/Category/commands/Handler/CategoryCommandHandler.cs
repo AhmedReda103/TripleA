@@ -8,7 +8,8 @@ namespace TripleA.Core.Features.Category.commands.Handler
 {
     public class CategoryCommandHandler : ResponseHandler,
                                                     IRequestHandler<AddCategoryCommand, Response<string>>,
-                                                    IRequestHandler<DeleteCategoryCommand, Response<string>>
+                                                    IRequestHandler<DeleteCategoryCommand, Response<string>>,
+                                                    IRequestHandler<EditCategoryCommand, Response<string>>
     {
         private readonly IMapper mapper;
         private readonly ICategoryService categoryService;
@@ -38,6 +39,21 @@ namespace TripleA.Core.Features.Category.commands.Handler
             else return BadRequest<string>();
 
 
+        }
+
+        public async Task<Response<string>> Handle(EditCategoryCommand request, CancellationToken cancellationToken)
+        {
+            var category = await categoryService.GetCategoryByIdAsync(request.Id);
+
+            if (category == null) return BadRequest<string>("Category Not Found");
+
+            //  var categoryMapper = mapper.Map<TripleA.Data.Entities.Category>(request);
+            var categoryMapper = mapper.Map(request, category);
+
+            var result = await categoryService.EditCategoryAsync(categoryMapper);
+
+            if (result == "Success") return Success<string>($"Edit Successfully {request.Id}");
+            else return BadRequest<string>();
         }
     }
 }

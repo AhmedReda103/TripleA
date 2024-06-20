@@ -41,9 +41,11 @@ namespace TripleA.Service.implementations
             }
         }
 
-        public Task<string> EditCategoryAsync(Category category)
+        public async Task<string> EditCategoryAsync(Category category)
         {
-            throw new NotImplementedException();
+            await unitOfWork.Categories.UpdateAsync(category);
+            await unitOfWork.SaveChangesAsync();
+            return "Success";
         }
 
         public IQueryable<Category> FilliterCategoriesPaginatedQuerable(string search)

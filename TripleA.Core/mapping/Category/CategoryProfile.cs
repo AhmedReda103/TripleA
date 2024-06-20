@@ -14,6 +14,7 @@ namespace TripleA.Core.mapping.Category
             CreateMap<Question, GetQuestionsByCategoryIdPaginatedResponse>();
             CreateMap<TripleA.Data.Entities.Category, GetCategoryListDto>();
             CreateMap<AddCategoryCommand, TripleA.Data.Entities.Category>();
+            CreateMap<EditCategoryCommand, TripleA.Data.Entities.Category>();
 
         }
     }
