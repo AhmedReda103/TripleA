@@ -5,6 +5,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using TripleA.Core.Features.Answers.Commands.Models;
+using TripleA.Core.Features.Answers.Queries;
 using TripleA.Data.Entities;
 
 namespace TripleA.Core.mapping.Answers
@@ -14,6 +15,7 @@ namespace TripleA.Core.mapping.Answers
         public AnswerProfile()
         {
             CreateMap<AddAnswerCommand, Answer>();
+            CreateMap<Answer, AnswerDto>();
         }
     }
 }
