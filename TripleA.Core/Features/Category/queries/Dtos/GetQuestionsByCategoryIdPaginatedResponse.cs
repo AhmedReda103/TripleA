@@ -9,6 +9,8 @@ namespace TripleA.Core.Features.Category.queries.Dtos
         public string? Title { get; set; }
         public string? Image { get; set; }
         public DateTime? CreatedIn { get; set; }
+
+        public string? UserId { get; set; }
        // public virtual ICollection<AnswerDto> Answers { get; set; } = new HashSet<AnswerDto>();
 
     }
