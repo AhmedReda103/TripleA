@@ -70,5 +70,9 @@ namespace TripleA.Service.implementations
             return question;
         }
 
+        //public async Task<Question> GetQuestionWithAnswersAndCommentsAsync(int questionId, int answersLimit, int commentsLimit)
+        //{
+        //    var questions = await _unitOfWork.Questions.GetByIdAsync(questionId);
+        //}
     }
 }

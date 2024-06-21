@@ -20,7 +20,7 @@ namespace TripleA.Core.Features.Question.Queries.Dtos
         public DateTime? CreatedIn { get; set; }
         public int? CategoryId { get; set; }
         public string? UserId { get; set; }
-        public virtual PaginatedResult<AnswerDtoForQuestionById> Answers { get; set; } 
+        public virtual PaginatedResult<AnswerDto> AnswersDto { get; set; } 
        
     }
 }

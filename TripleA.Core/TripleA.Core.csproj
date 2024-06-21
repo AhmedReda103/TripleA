@@ -24,9 +24,6 @@
   </ItemGroup>
 
   <ItemGroup>
-    <Folder Include="Features\ApplicationUser\Queries\Dtos\" />
-    <Folder Include="Features\ApplicationUser\Queries\Handler\" />
-    <Folder Include="Features\ApplicationUser\Queries\Model\" />
     <Folder Include="Features\Category\validator\" />
   </ItemGroup>
 
