@@ -40,7 +40,7 @@ namespace TripleA.Api.Controllers
         }
 
         [HttpGet("/GetQuestionsPaginated")]
-        [Authorize]
+        //  [Authorize]
         public async Task<IActionResult> GetQuestionsPaginated([FromQuery] GetQuestionsListPaginatedQuery query)
         {
 
