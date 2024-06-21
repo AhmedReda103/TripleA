@@ -1,6 +1,7 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using TripleA.Api.Base;
 using TripleA.Core.Features.ApplicationUser.Commands.Models;
+using TripleA.Core.Features.ApplicationUser.Queries.Model;
 using TripleA.Data.AppMetaData;
 
 namespace TripleA.Api.Controllers
@@ -23,11 +24,11 @@ namespace TripleA.Api.Controllers
 
         }
 
-        //[HttpGet("{id}")]
-        //public async Task<IActionResult> Get(int id)
-        //{
-        //    return NewResult(await Mediator.Send(new GetUserByIdQuery { UserId = id }));
+        [HttpGet("{id}")]
+        public async Task<IActionResult> Get(string id)
+        {
+            return NewResult(await Mediator.Send(new GetUserByIdQuery { UserId = id }));
 
-        //}
+        }
     }
 }
