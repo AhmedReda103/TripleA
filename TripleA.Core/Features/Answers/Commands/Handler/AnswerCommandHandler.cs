@@ -4,6 +4,7 @@ using Microsoft.AspNetCore.SignalR;
 using TripleA.Core.Bases;
 using TripleA.Core.Features.Answers.Commands.Models;
 using TripleA.Core.Resources;
+using TripleA.Data.Entities;
 using TripleA.Service.Abstracts;
 using TripleA.Service.implementations;
 
@@ -21,6 +22,8 @@ namespace TripleA.Core.Features.Answers.Commands.Handler
         private readonly IMapper mapper;
         private readonly IAnswerService answerService;
         private readonly IApplicationUserService applicationUserService;
+        private readonly INotificationService notificationService;
+        private readonly IQuestionService questionService;
         private readonly IHubContext<RealTimeService> realTimeService;
         private readonly IFileService fileService;
 
@@ -28,27 +31,46 @@ namespace TripleA.Core.Features.Answers.Commands.Handler
                                     IAnswerService answerService,
                                     IApplicationUserService applicationUserService,
                                     IHubContext<RealTimeService> realTimeService,
-                                    IFileService fileService)
+                                    IFileService fileService,
+                                    INotificationService notificationService,
+                                    IQuestionService questionService)
         {
             this.mapper = mapper;
             this.answerService = answerService;
             this.applicationUserService = applicationUserService;
             this.realTimeService = realTimeService;
             this.fileService = fileService;
+            this.notificationService = notificationService;
+            this.questionService = questionService;
         }
+
+
         public async Task<Response<string>> Handle(AddAnswerCommand request, CancellationToken cancellationToken)
         {
             var AnswerMapper = mapper.Map<TripleA.Data.Entities.Answer>(request);
             var UserId = await applicationUserService.getUserIdAsync();  //ADD two roles then use ord. userid
             AnswerMapper.UserId = UserId;
+
             AnswerMapper.CreatedIn = DateTime.Now;
             var result = await answerService.AddAnswer(AnswerMapper, request.Image);
 
+            var AskerId = questionService.GetByIDAsync(request.QuestionId).Result.UserId;
+            //var AskerId = AnswerMapper?.Question?.user.Id;
+            //var AskerId2 = AnswerMapper?.Question?.UserId;
 
-            var AskerId = AnswerMapper?.Question?.UserId;
+            var ResponderName = applicationUserService.GetUserByIdAsync(UserId).Result.UserName;
             if (result == "Added")
             {
-                await realTimeService.Clients.User(AskerId).SendAsync("ReceiveNotification", SharedResourcesKeys.notificationMessage + $" : {AnswerMapper.Description}");
+                var notification = new Notification()
+                {
+                    CreatedIn = DateTime.Now,
+                    Message = SharedResourcesKeys.notificationMessage + $" : {AnswerMapper.Description}",
+                    UserId = AskerId,
+                    Responder = ResponderName
+
+                };
+                await notificationService.addNotificationAsync(notification);
+                await realTimeService.Clients.User(AskerId).SendAsync("ReceiveNotification", notification);
                 return Created("");
             }
             else return BadRequest<string>();

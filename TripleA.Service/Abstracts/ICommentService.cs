@@ -14,5 +14,6 @@ namespace TripleA.Service.Abstracts
         public Task<string> DeleteAsync(Comment comment);
         public Task<Comment> GetCommentByIDAsync(int id);
         public Task<string> EditAsync(Comment comment);
+        IQueryable<Comment> getCommentsByAnswerIdPaginatedQuerable(int AnswerId);
     }
 }

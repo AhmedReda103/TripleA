@@ -1,5 +1,6 @@
 
 using Microsoft.AspNetCore.Http;
+using Microsoft.IdentityModel.Tokens;
 using System.Diagnostics;
 using TripleA.Data.Entities;
 using TripleA.Infrustructure.unitOfWork;
@@ -95,6 +96,27 @@ namespace TripleA.Service.implementations
             }
         }
 
+        public IQueryable<Answer> getAnswersByQuestionIdPaginatedQuerable(int questionId)
+        {
+            var Question = unitOfWork.Questions.GetTableNoTracking().AsQueryable().Where(v => v.Id == questionId);
+            var Answers = unitOfWork.Answers.GetTableNoTracking().AsQueryable();
+            if (!Question.IsNullOrEmpty() && !Answers.IsNullOrEmpty())
+            {
+                var query = from a in Question
+                            join b in Answers on a.Id equals b.QuestionId
+                            select new Answer
+                            {
+                                Id = b.Id,
+                                Description = b.Description,
+                                Image = b.Image,
+                                CreatedIn = b.CreatedIn,
+                                UserId = b.UserId
 
+
+                            };
+                return query;
+            }
+            return Enumerable.Empty<Answer>().AsQueryable();
+        }
     }
 }

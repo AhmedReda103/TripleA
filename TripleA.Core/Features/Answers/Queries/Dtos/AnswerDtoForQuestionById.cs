@@ -18,6 +18,6 @@ namespace TripleA.Core.Features.Answers.Queries.Dtos
         public int? QuestionId { get; set; }
         public string? UserId { get; set; }
 
-        public virtual PaginatedResult<CommentDto> Comments { get; set; } 
+        public virtual PaginatedResult<CommentDto> CommentsDto { get; set; } 
     }
 }

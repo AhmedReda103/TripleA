@@ -71,6 +71,7 @@ namespace TripleA.Service.implementations
             return question;
         }
 
+
         public IQueryable<Question> GetQuestionsQuerable()
         {
             return _unitOfWork.Questions.GetTableNoTracking().AsQueryable();
@@ -115,5 +116,11 @@ namespace TripleA.Service.implementations
             }
             return Enumerable.Empty<Question>().AsQueryable();
         }
+
+        //public async Task<Question> GetQuestionWithAnswersAndCommentsAsync(int questionId, int answersLimit, int commentsLimit)
+        //{
+        //    var questions = await _unitOfWork.Questions.GetByIdAsync(questionId);
+        //}
+
     }
 }

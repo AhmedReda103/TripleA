@@ -1,4 +1,6 @@
-﻿namespace TripleA.Core.Features.Category.queries.Dtos
+﻿using TripleA.Core.Features.Answers.Queries.Dtos;
+
+namespace TripleA.Core.Features.Category.queries.Dtos
 {
     public class GetQuestionsByCategoryIdPaginatedResponse
     {
@@ -7,7 +9,9 @@
         public string? Title { get; set; }
         public string? Image { get; set; }
         public DateTime? CreatedIn { get; set; }
-        public virtual ICollection<AnswerDto> Answers { get; set; } = new HashSet<AnswerDto>();
+
+        public string? UserId { get; set; }
+       // public virtual ICollection<AnswerDto> Answers { get; set; } = new HashSet<AnswerDto>();
 
     }
 }
