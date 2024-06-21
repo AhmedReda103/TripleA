@@ -86,9 +86,30 @@ namespace TripleA.Service.implementations
             }
             if (search != null)
             {
-                querable = querable.Where(x => x.Title.Contains(search));
+                querable = querable.Where(x => x.Title.Contains(search) || x.Category.Name.Contains(search));
+
             }
             return querable;
+        }
+
+        public IQueryable<Question> GetQuestionByTitleQuerable(string title)
+        {
+            var questions = _unitOfWork.Questions.GetTableNoTracking().Where(q => q.Title == title).AsQueryable();
+            if (!questions.IsNullOrEmpty())
+            {
+                var query = from b in questions
+                            select new Question
+                            {
+                                Title = b.Title,
+                                Description = b.Description,
+                                Image = b.Image,
+                                CreatedIn = b.CreatedIn,
+                                Category = b.Category,
+                                user = b.user,
+                            };
+                return query;
+            }
+            return Enumerable.Empty<Question>().AsQueryable();
         }
     }
 }

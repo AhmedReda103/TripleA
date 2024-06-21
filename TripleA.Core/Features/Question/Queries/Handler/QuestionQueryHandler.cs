@@ -11,9 +11,8 @@ namespace TripleA.Core.Features.Question.Queries.Handler
 {
     public class QuestionQueryHandler : ResponseHandler,
                                         IRequestHandler<GetQuestionsByIdQuery, Response<GetQuestionByIdDto>>,
-
-                                       IRequestHandler<GetQuestionsListPaginatedQuery, Response<PaginatedResult<GetQuestionsListPaginatedResponse>>>
-
+                                       IRequestHandler<GetQuestionsListPaginatedQuery, Response<PaginatedResult<GetQuestionsListPaginatedResponse>>>,
+                                       IRequestHandler<GetQuestionByTitlePaginatedQuery, Response<PaginatedResult<GetQuestionByTitlePaginatedResponse>>>
 
     {
         private readonly IMapper mapper;
@@ -37,6 +36,17 @@ namespace TripleA.Core.Features.Question.Queries.Handler
 
             if (FilterQuery.IsNullOrEmpty()) return NotFound<PaginatedResult<GetQuestionsListPaginatedResponse>>();
             var PaginatedList = await mapper.ProjectTo<GetQuestionsListPaginatedResponse>(FilterQuery).ToPaginatedListAsync(request.PageNumber, request.PageSize);
+
+            return Success(PaginatedList);
+        }
+
+        public async Task<Response<PaginatedResult<GetQuestionByTitlePaginatedResponse>>> Handle(GetQuestionByTitlePaginatedQuery request, CancellationToken cancellationToken)
+        {
+            var JoinQueryRes = questionService.GetQuestionByTitleQuerable(request.QuestionTitle);
+
+            if (JoinQueryRes.IsNullOrEmpty()) return NotFound<PaginatedResult<GetQuestionByTitlePaginatedResponse>>();
+
+            var PaginatedList = await mapper.ProjectTo<GetQuestionByTitlePaginatedResponse>(JoinQueryRes).ToPaginatedListAsync(request.PageNumber, request.PageSize);
 
             return Success(PaginatedList);
         }
