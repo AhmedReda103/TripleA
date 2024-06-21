@@ -1,5 +1,6 @@
 ﻿using AutoMapper;
 using MediatR;
+using Microsoft.IdentityModel.Tokens;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -19,7 +20,8 @@ using TripleA.Service.implementations;
 namespace TripleA.Core.Features.Question.Queries.Handler
 {
     public class QuestionQueryHandler : ResponseHandler,
-                                        IRequestHandler<GetQuestionsByIdQuery, Response<GetQuestionByIdDto>>
+                                        IRequestHandler<GetQuestionsByIdQuery, Response<GetQuestionByIdDto>>,
+                                        IRequestHandler<GetMoreAnswersQuery,Response<PaginatedResult<AnswerDtoForQuestionById>>>
     {
         private readonly IMapper mapper;
         private readonly IQuestionService questionService;
@@ -63,6 +65,15 @@ namespace TripleA.Core.Features.Question.Queries.Handler
                 return Success(questionMapper);
             }
            
+        }
+
+        public async Task<Response<PaginatedResult<AnswerDtoForQuestionById>>> Handle(GetMoreAnswersQuery request, CancellationToken cancellationToken)
+        {
+            var JoinQueryRes = answerService.getAnswersByQuestionIdPaginatedQuerable(request.questionId);
+            if (JoinQueryRes.IsNullOrEmpty()) return NotFound<PaginatedResult<AnswerDtoForQuestionById>>();
+
+            var AnswersPaginatedList = await mapper.ProjectTo<AnswerDtoForQuestionById>(JoinQueryRes).ToPaginatedListAsync(request.PageNum, request.limit);
+            return Success(AnswersPaginatedList);
         }
     }
 }

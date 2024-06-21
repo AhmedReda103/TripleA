@@ -39,6 +39,12 @@ namespace TripleA.Api.Controllers
             return NewResult(response);
         }
 
+        [HttpGet("/moreAnswers")]
+        public async Task<IActionResult> GetMoreAnswers(int questionId, int PageIndex, int Limit)
+        {
+            return NewResult(await Mediator.Send(new GetMoreAnswersQuery {questionId=questionId, PageNum = PageIndex,limit=Limit }));
+        }
+
 
     }
 }
