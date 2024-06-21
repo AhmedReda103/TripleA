@@ -16,12 +16,14 @@ namespace TripleA.Core.mapping.Questions
 
 
             CreateMap<Question, GetQuestionsListPaginatedResponse>();
-            CreateMap<Question, GetQuestionByTitlePaginatedResponse>();
+            CreateMap<Question, GetQuestionByTitlePaginatedResponse>()
+                .ForMember(des => des.UserName, opt => opt.MapFrom(src => src.user.UserName));
 
 
             CreateMap<DeleteQuestionCommand, Question>();
 
             CreateMap<Question, GetQuestionByIdDto>();
+
 
         }
 
