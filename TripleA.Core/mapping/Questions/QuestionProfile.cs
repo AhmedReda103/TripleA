@@ -14,11 +14,15 @@ namespace TripleA.Core.mapping.Questions
             CreateMap<EditQuestionCommand, Question>()
                 .ForMember(des => des.Image, opt => opt.MapFrom(src => src.ImagePath));
 
+
+            CreateMap<Question, GetQuestionsListPaginatedResponse>();
+            CreateMap<Question, GetQuestionByTitlePaginatedResponse>();
+
+
             CreateMap<DeleteQuestionCommand, Question>();
 
             CreateMap<Question, GetQuestionByIdDto>();
 
-    
         }
 
     }

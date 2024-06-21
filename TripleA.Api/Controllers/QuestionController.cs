@@ -39,6 +39,16 @@ namespace TripleA.Api.Controllers
             return NewResult(response);
         }
 
+
+        [HttpGet("/GetQuestionsPaginated")]
+        [Authorize]
+        public async Task<IActionResult> GetQuestionsPaginated([FromQuery] GetQuestionsListPaginatedQuery query)
+        {
+
+            var response = await Mediator.Send(query);
+            return NewResult(response);
+        }
+
         [HttpGet("/moreAnswers")]
         public async Task<IActionResult> GetMoreAnswers(int questionId, int PageIndex, int Limit)
         {
@@ -46,5 +56,14 @@ namespace TripleA.Api.Controllers
         }
 
 
+
+
+        [HttpGet("/GetQuestionByTitlePagenated")]
+        //[Authorize]
+        public async Task<IActionResult> GetQuestionsByTitlePagenated([FromQuery] GetQuestionByTitlePaginatedQuery query)
+        {
+            var response = await Mediator.Send(query);
+            return NewResult(response);
+        }
     }
 }
