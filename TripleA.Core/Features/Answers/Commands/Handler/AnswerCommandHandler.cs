@@ -58,7 +58,7 @@ namespace TripleA.Core.Features.Answers.Commands.Handler
             //var AskerId = AnswerMapper?.Question?.user.Id;
             //var AskerId2 = AnswerMapper?.Question?.UserId;
 
-            var ResponderName = applicationUserService.getUserByIdAsync(UserId).Result.UserName;
+            var ResponderName = applicationUserService.GetUserByIdAsync(UserId).Result.UserName;
             if (result == "Added")
             {
                 var notification = new Notification()
