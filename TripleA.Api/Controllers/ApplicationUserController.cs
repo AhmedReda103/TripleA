@@ -9,7 +9,7 @@ namespace TripleA.Api.Controllers
     public class ApplicationUserController : AppControllerBase
     {
         [HttpPost(Router.ApplicationUserRouting.Create)]
-        public async Task<IActionResult> Create([FromForm] AddUserCommand command)
+        public async Task<IActionResult> Create([FromBody] AddUserCommand command)
         {
             var response = await Mediator.Send(command);
             return NewResult(response);
