@@ -26,11 +26,12 @@ namespace TripleA.Core.Features.Question.Queries.Handler
     public class QuestionQueryHandler : ResponseHandler,
                                         IRequestHandler<GetQuestionsByIdQuery, Response<GetQuestionByIdDto>>,
 
-                                       IRequestHandler<GetQuestionsListPaginatedQuery, Response<PaginatedResult<GetQuestionsListPaginatedResponse>>>,
-                                       IRequestHandler<GetQuestionByTitlePaginatedQuery, Response<PaginatedResult<GetQuestionByTitlePaginatedResponse>>>,
+                                        IRequestHandler<GetQuestionsListPaginatedQuery, Response<PaginatedResult<GetQuestionsListPaginatedResponse>>>,
+                                        IRequestHandler<GetQuestionByTitlePaginatedQuery, Response<PaginatedResult<GetQuestionByTitlePaginatedResponse>>>,
 
 
-                                        IRequestHandler<GetMoreAnswersQuery,Response<PaginatedResult<AnswerDtoForQuestionById>>>
+                                        IRequestHandler<GetMoreAnswersQuery,Response<PaginatedResult<AnswerDtoForQuestionById>>>,
+                                        IRequestHandler<GetMoreCommentsQuery,Response<PaginatedResult<CommentDto>>>
 
     {
         private readonly IMapper mapper;
@@ -93,6 +94,13 @@ namespace TripleA.Core.Features.Question.Queries.Handler
             return Success(AnswersPaginatedList);
         }
 
+        public async Task<Response<PaginatedResult<CommentDto>>> Handle(GetMoreCommentsQuery request, CancellationToken cancellationToken)
+        {
+            var joinQueryResForComments = commentService.getCommentsByAnswerIdPaginatedQuerable(request.answerId);
+            var CommentsPaginatedList = await mapper.ProjectTo<CommentDto>(joinQueryResForComments).ToPaginatedListAsync(request.PageNum, request.Commentlimit = 3);
+            return Success(CommentsPaginatedList);
+        }
+
         public async Task<Response<PaginatedResult<GetQuestionsListPaginatedResponse>>> Handle(GetQuestionsListPaginatedQuery request, CancellationToken cancellationToken)
         {
             var FilterQuery = questionService.FilliterQuestionsPaginatedQuerable(request.Search);
@@ -113,5 +121,7 @@ namespace TripleA.Core.Features.Question.Queries.Handler
 
             return Success(PaginatedList);
         }
+
+       
     }
 }
