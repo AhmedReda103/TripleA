@@ -14,12 +14,12 @@ namespace TripleA.Api.Controllers
     {
         [HttpPost("/addComment")]
         [Authorize]
-        public async Task<IActionResult> Add([FromBody]AddCommentCommand command)
+        public async Task<IActionResult> Add([FromBody] AddCommentCommand command)
         {
-            return NewResult(await Mediator.Send (command));
+            return NewResult(await Mediator.Send(command));
         }
 
-        [HttpPost("/deleteComment")]
+        [HttpDelete("/deleteComment")]
         //[Authorize]
         public async Task<IActionResult> Delete(int id)
         {

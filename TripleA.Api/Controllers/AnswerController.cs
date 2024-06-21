@@ -32,7 +32,7 @@ namespace TripleA.Api.Controllers
             return NewResult(await Mediator.Send(new DownVoteAnswerCommand { AnswerId = answerId }));
         }
 
-        [HttpPost("/deleteAnswer")]
+        [HttpDelete("/deleteAnswer")]
         //[Authorize]
         public async Task<IActionResult> Delete(int id)
         {
