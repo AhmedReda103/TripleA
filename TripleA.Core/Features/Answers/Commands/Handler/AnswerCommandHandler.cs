@@ -13,7 +13,8 @@ namespace TripleA.Core.Features.Answers.Commands.Handler
                                         IRequestHandler<AddAnswerCommand, Response<string>>,
                                         IRequestHandler<UpVoteAnswerCommand, Response<string>>,
                                         IRequestHandler<DownVoteAnswerCommand, Response<string>>,
-                                        IRequestHandler<DeleteAnswerCommand, Response<string>>
+                                        IRequestHandler<DeleteAnswerCommand, Response<string>>,
+                                        IRequestHandler<EditAnswerCommand, Response<string>>
 
 
     {
@@ -21,16 +22,19 @@ namespace TripleA.Core.Features.Answers.Commands.Handler
         private readonly IAnswerService answerService;
         private readonly IApplicationUserService applicationUserService;
         private readonly IHubContext<RealTimeService> realTimeService;
+        private readonly IFileService fileService;
 
         public AnswerCommandHandler(IMapper mapper,
                                     IAnswerService answerService,
                                     IApplicationUserService applicationUserService,
-                                    IHubContext<RealTimeService> realTimeService)
+                                    IHubContext<RealTimeService> realTimeService,
+                                    IFileService fileService)
         {
             this.mapper = mapper;
             this.answerService = answerService;
             this.applicationUserService = applicationUserService;
             this.realTimeService = realTimeService;
+            this.fileService = fileService;
         }
         public async Task<Response<string>> Handle(AddAnswerCommand request, CancellationToken cancellationToken)
         {
@@ -40,7 +44,7 @@ namespace TripleA.Core.Features.Answers.Commands.Handler
             AnswerMapper.CreatedIn = DateTime.Now;
             var result = await answerService.AddAnswer(AnswerMapper, request.Image);
 
-      
+
             var AskerId = AnswerMapper?.Question?.UserId;
             if (result == "Added")
             {
@@ -56,7 +60,7 @@ namespace TripleA.Core.Features.Answers.Commands.Handler
             var replyerId = await answerService.getReplyerIdOfAnswer(request.AnswerId);
             await applicationUserService.upUser(replyerId);
             await answerService.Upvote(answer);
-           
+
             return Success("");
         }
 
@@ -80,8 +84,38 @@ namespace TripleA.Core.Features.Answers.Commands.Handler
             else return BadRequest<string>();
         }
 
+        public async Task<Response<string>> Handle(EditAnswerCommand request, CancellationToken cancellationToken)
+        {
+            //Check if the Id is Exist Or not
+            var answer = await answerService.GetAnswerByIdAsync(request.Id);
+            //return NotFound
+            if (answer == null) return NotFound<string>();
 
+            if (request.Image != null)
+            {
+                string imagePath = answer.Image;
+                var deleted = fileService.DeleteFile(imagePath);
+                if (deleted)
+                {
+                    var fileUrl = await fileService.UploadFile("Answer", request.Image);
+                    if (fileUrl != "FailedToUploadFile")
+                    {
+                        request.ImagePath = fileUrl;
+                    }
+                    else
+                    {
+                        request.ImagePath = null;
+                    }
+                }
+            }
 
-
+            //mapping Between request and question
+            var questionMapper = mapper.Map(request, answer);
+            //Call service that make Edit
+            var result = await answerService.EditAsync(questionMapper);
+            //return response
+            if (result == "Success") return Success("Updated");
+            else return BadRequest<string>();
+        }
     }
 }

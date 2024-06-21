@@ -86,10 +86,10 @@ namespace TripleA.Service.implementations
             if (!questions.IsNullOrEmpty() && !categories.IsNullOrEmpty())
             {
                 var query = from a in categories
-                            join b in questions on a.Id equals b.Id
+                            join b in questions on a.Id equals b.CategoryId
                             select new Question
                             {
-                                Id = a.Id,
+                                Id = b.Id,
                                 Description = b.Description,
                                 Title = b.Title,
                                 Image = b.Image,

@@ -2,8 +2,6 @@
 using MediatR;
 using TripleA.Core.Bases;
 using TripleA.Core.Features.Question.Commands.Models;
-using TripleA.Core.Features.Question.Queries.Dtos;
-using TripleA.Core.Features.Question.Queries.Model;
 using TripleA.Service.Abstracts;
 
 namespace TripleA.Core.Features.Question.Commands.Handlers
@@ -49,11 +47,45 @@ namespace TripleA.Core.Features.Question.Commands.Handlers
         public async Task<Response<string>> Handle(DeleteQuestionCommand request, CancellationToken cancellationToken)
         {
             var question = await questionService.GetByIDAsync(request.Id);
-            if (question == null) 
+            if (question == null)
                 return NotFound<string>();
             // Call service that make Delete
             var result = await questionService.DeleteAsync(question);
             if (result == "Success") return Deleted<string>();
+            else return BadRequest<string>();
+        }
+
+        public async Task<Response<string>> Handle(EditQuestionCommand request, CancellationToken cancellationToken)
+        {
+            //Check if the Id is Exist Or not
+            var question = await questionService.GetByIDAsync(request.Id);
+            //return NotFound
+            if (question == null) return NotFound<string>();
+
+            if (request.Image != null)
+            {
+                string imagePath = question.Image;
+                var deleted = fileService.DeleteFile(imagePath);
+                if (deleted)
+                {
+                    var fileUrl = await fileService.UploadFile("Question", request.Image);
+                    if (fileUrl != "FailedToUploadFile")
+                    {
+                        request.ImagePath = fileUrl;
+                    }
+                    else
+                    {
+                        request.ImagePath = null;
+                    }
+                }
+            }
+
+            //mapping Between request and question
+            var questionMapper = mapper.Map(request, question);
+            //Call service that make Edit
+            var result = await questionService.EditAsync(questionMapper);
+            //return response
+            if (result == "Success") return Success("Updated");
             else return BadRequest<string>();
         }
     }
