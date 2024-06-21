@@ -55,9 +55,38 @@ namespace TripleA.Core.Features.Question.Commands.Handlers
             else return BadRequest<string>();
         }
 
-        public Task<Response<string>> Handle(EditQuestionCommand request, CancellationToken cancellationToken)
+        public async Task<Response<string>> Handle(EditQuestionCommand request, CancellationToken cancellationToken)
         {
-            throw new NotImplementedException();
+            //Check if the Id is Exist Or not
+            var question = await questionService.GetByIDAsync(request.Id);
+            //return NotFound
+            if (question == null) return NotFound<string>();
+
+            if (request.Image != null)
+            {
+                string imagePath = question.Image;
+                var deleted = fileService.DeleteFile(imagePath);
+                if (deleted)
+                {
+                    var fileUrl = await fileService.UploadFile("Question", request.Image);
+                    if (fileUrl != "FailedToUploadFile")
+                    {
+                        request.ImagePath = fileUrl;
+                    }
+                    else
+                    {
+                        request.ImagePath = null;
+                    }
+                }
+            }
+
+            //mapping Between request and question
+            var questionMapper = mapper.Map(request, question);
+            //Call service that make Edit
+            var result = await questionService.EditAsync(questionMapper);
+            //return response
+            if (result == "Success") return Success("Updated");
+            else return BadRequest<string>();
         }
     }
 }

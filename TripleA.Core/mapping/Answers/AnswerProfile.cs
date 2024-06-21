@@ -17,8 +17,6 @@ namespace TripleA.Core.mapping.Answers
 
             CreateMap<EditAnswerCommand, Answer>()
                 .ForMember(des => des.Image, opt => opt.MapFrom(src => src.ImagePath));
-            CreateMap<EditAnswerCommand, Answer>();
-            CreateMap<Answer, AnswerDto>();
         }
     }
 }
