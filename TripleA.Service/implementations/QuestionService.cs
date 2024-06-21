@@ -1,4 +1,5 @@
 ﻿using Microsoft.AspNetCore.Http;
+using Microsoft.IdentityModel.Tokens;
 using System.Diagnostics;
 using TripleA.Data.Entities;
 using TripleA.Infrustructure.unitOfWork;
@@ -69,6 +70,53 @@ namespace TripleA.Service.implementations
             var question = await _unitOfWork.Questions.GetByIdAsync(id);
             return question;
         }
+
+
+        public IQueryable<Question> GetQuestionsQuerable()
+        {
+            return _unitOfWork.Questions.GetTableNoTracking().AsQueryable();
+        }
+
+
+        public IQueryable<Question> FilliterQuestionsPaginatedQuerable(string search)
+        {
+            var querable = _unitOfWork.Questions.GetTableNoTracking().AsQueryable();
+            if (querable.IsNullOrEmpty())
+            {
+                return Enumerable.Empty<Question>().AsQueryable();
+            }
+            if (search != null)
+            {
+                querable = querable.Where(x => x.Title.Contains(search) || x.Category.Name.Contains(search));
+
+            }
+            return querable;
+        }
+
+        public IQueryable<Question> GetQuestionByTitleQuerable(string title)
+        {
+            var questions = _unitOfWork.Questions.GetTableNoTracking().Where(q => q.Title == title).AsQueryable();
+            if (!questions.IsNullOrEmpty())
+            {
+                var query = from b in questions
+                            select new Question
+                            {
+                                Title = b.Title,
+                                Description = b.Description,
+                                Image = b.Image,
+                                CreatedIn = b.CreatedIn,
+                                Category = b.Category,
+                                user = b.user,
+                            };
+                return query;
+            }
+            return Enumerable.Empty<Question>().AsQueryable();
+        }
+
+        //public async Task<Question> GetQuestionWithAnswersAndCommentsAsync(int questionId, int answersLimit, int commentsLimit)
+        //{
+        //    var questions = await _unitOfWork.Questions.GetByIdAsync(questionId);
+        //}
 
     }
 }

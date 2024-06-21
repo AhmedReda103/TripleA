@@ -12,9 +12,9 @@ namespace TripleA.Api.Controllers
     {
         [HttpGet("{id}")]
         [Authorize]
-        public async Task<IActionResult> Get(int id)
+        public async Task<IActionResult> Get(int id,int answerLimit,int commentLimit)
         {
-            return NewResult(await Mediator.Send(new GetQuestionsByIdQuery { QuestionId = id }));
+            return NewResult(await Mediator.Send(new GetQuestionsByIdQuery { QuestionId = id ,answersLimit = answerLimit, commentsLimit= commentLimit }));
         }
 
 
@@ -40,5 +40,30 @@ namespace TripleA.Api.Controllers
         }
 
 
+        [HttpGet("/GetQuestionsPaginated")]
+        [Authorize]
+        public async Task<IActionResult> GetQuestionsPaginated([FromQuery] GetQuestionsListPaginatedQuery query)
+        {
+
+            var response = await Mediator.Send(query);
+            return NewResult(response);
+        }
+
+        [HttpGet("/moreAnswers")]
+        public async Task<IActionResult> GetMoreAnswers(int questionId, int PageIndex, int Limit)
+        {
+            return NewResult(await Mediator.Send(new GetMoreAnswersQuery {questionId=questionId, PageNum = PageIndex,limit=Limit }));
+        }
+
+
+
+
+        [HttpGet("/GetQuestionByTitlePagenated")]
+        //[Authorize]
+        public async Task<IActionResult> GetQuestionsByTitlePagenated([FromQuery] GetQuestionByTitlePaginatedQuery query)
+        {
+            var response = await Mediator.Send(query);
+            return NewResult(response);
+        }
     }
 }
