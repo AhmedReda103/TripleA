@@ -95,7 +95,7 @@ namespace TripleA.Service.implementations
                                 Image = b.Image,
                                 CreatedIn = b.CreatedIn,
                                 Answers = b.Answers,
-
+                                UserId = b.UserId
 
 
                             };

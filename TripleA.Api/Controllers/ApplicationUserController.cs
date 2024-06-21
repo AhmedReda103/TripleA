@@ -22,5 +22,12 @@ namespace TripleA.Api.Controllers
             return NewResult(response);
 
         }
+
+        //[HttpGet("{id}")]
+        //public async Task<IActionResult> Get(int id)
+        //{
+        //    return NewResult(await Mediator.Send(new GetUserByIdQuery { UserId = id }));
+
+        //}
     }
 }

@@ -10,7 +10,7 @@ namespace TripleA.Core.mapping.Category
         public CategoryProfile()
         {
 
-
+            
             CreateMap<Question, GetQuestionsByCategoryIdPaginatedResponse>();
             CreateMap<TripleA.Data.Entities.Category, GetCategoryListDto>();
             CreateMap<AddCategoryCommand, TripleA.Data.Entities.Category>();
