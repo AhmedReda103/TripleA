@@ -155,9 +155,14 @@ namespace TripleA.Service.implementations
             await unitOfWork.SaveChangesAsync();
         }
 
+        public async Task<User> GetUserByIdAsync(string userId)
+        {
+           return await unitOfWork.Users.GetByIdAsync(userId);
+
         public async Task<User> getUserByIdAsync(string userId)
         {
             return await unitOfWork.Users.GetByIdAsync(userId);
+
         }
     }
 }

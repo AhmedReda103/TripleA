@@ -12,9 +12,9 @@ namespace TripleA.Api.Controllers
     {
         [HttpGet("{id}")]
         [Authorize]
-        public async Task<IActionResult> Get(int id)
+        public async Task<IActionResult> Get(int id,int answerLimit,int commentLimit)
         {
-            return NewResult(await Mediator.Send(new GetQuestionsByIdQuery { QuestionId = id }));
+            return NewResult(await Mediator.Send(new GetQuestionsByIdQuery { QuestionId = id ,answersLimit = answerLimit, commentsLimit= commentLimit }));
         }
 
 

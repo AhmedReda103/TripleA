@@ -1,5 +1,6 @@
 ﻿using AutoMapper;
 using TripleA.Core.Features.Question.Commands.Models;
+using TripleA.Core.Features.Question.Queries.Dtos;
 using TripleA.Data.Entities;
 
 namespace TripleA.Core.mapping.Questions
@@ -12,6 +13,12 @@ namespace TripleA.Core.mapping.Questions
 
             CreateMap<EditQuestionCommand, Question>()
                 .ForMember(des => des.Image, opt => opt.MapFrom(src => src.ImagePath));
+
+            CreateMap<DeleteQuestionCommand, Question>();
+
+            CreateMap<Question, GetQuestionByIdDto>();
+
+    
         }
 
     }

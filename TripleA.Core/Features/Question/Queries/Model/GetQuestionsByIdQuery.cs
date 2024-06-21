@@ -12,5 +12,8 @@ namespace TripleA.Core.Features.Question.Queries.Model
     public class GetQuestionsByIdQuery : IRequest<Response<GetQuestionByIdDto>>
     {
         public int QuestionId;
+        public int answersLimit =5;
+        public int commentsLimit =3;
+
     }
 }
