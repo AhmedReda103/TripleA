@@ -18,6 +18,7 @@ namespace TripleA.Infrustructure
 
             services.AddTransient<IQuestionRepository, QuestionRepository>();
             services.AddTransient<ICommentRepository, CommentRepository>();
+            services.AddTransient<INotificationRepository, NotificationRepository>();
 
             services.AddTransient<IAnswerRepository, AnswerRepository>();
             services.AddTransient<ICategoryRepository, CategoryRepository>();

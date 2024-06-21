@@ -14,7 +14,8 @@ namespace TripleA.Infrustructure.unitOfWork
         public IAnswerRepository Answers { get; }
         public ICommentRepository Comments { get; }
         public ICategoryRepository Categories { get; }
-        public IUserRepository Users { get; }     
+        public INotificationRepository Notifications { get; }
+        public IUserRepository Users { get; }
         ApplicationDbContext _context { get; }
 
         Task SaveChangesAsync();
