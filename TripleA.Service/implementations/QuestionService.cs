@@ -1,4 +1,5 @@
 ﻿using Microsoft.AspNetCore.Http;
+using Microsoft.IdentityModel.Tokens;
 using System.Diagnostics;
 using TripleA.Data.Entities;
 using TripleA.Infrustructure.unitOfWork;
@@ -70,5 +71,24 @@ namespace TripleA.Service.implementations
             return question;
         }
 
+        public IQueryable<Question> GetQuestionsQuerable()
+        {
+            return _unitOfWork.Questions.GetTableNoTracking().AsQueryable();
+        }
+
+
+        public IQueryable<Question> FilliterQuestionsPaginatedQuerable(string search)
+        {
+            var querable = _unitOfWork.Questions.GetTableNoTracking().AsQueryable();
+            if (querable.IsNullOrEmpty())
+            {
+                return Enumerable.Empty<Question>().AsQueryable();
+            }
+            if (search != null)
+            {
+                querable = querable.Where(x => x.Title.Contains(search));
+            }
+            return querable;
+        }
     }
 }

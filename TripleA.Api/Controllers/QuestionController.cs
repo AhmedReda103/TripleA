@@ -39,6 +39,13 @@ namespace TripleA.Api.Controllers
             return NewResult(response);
         }
 
+        [HttpGet("/GetQuestionsPaginated")]
+        //[Authorize]
+        public async Task<IActionResult> GetQuestionsPaginated([FromQuery] GetQuestionsListPaginatedQuery query)
+        {
 
+            var response = await Mediator.Send(query);
+            return NewResult(response);
+        }
     }
 }
