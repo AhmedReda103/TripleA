@@ -14,7 +14,8 @@ namespace TripleA.Core.Features.Question.Queries.Model
     public class GetMoreAnswersQuery : IRequest<Response<PaginatedResult<AnswerDtoForQuestionById>>>
     {
         public int questionId;
-        public int PageNum;
-        public int limit;
+        public int PageNum=2;
+        public int Answerlimit=5;
+        public int Commentlimit=3;
     }
 }

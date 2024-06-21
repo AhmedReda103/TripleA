@@ -27,7 +27,7 @@ namespace TripleA.Core.Features.Question.Queries.Handler
                                         IRequestHandler<GetQuestionsByIdQuery, Response<GetQuestionByIdDto>>,
 
                                        IRequestHandler<GetQuestionsListPaginatedQuery, Response<PaginatedResult<GetQuestionsListPaginatedResponse>>>,
-                                       IRequestHandler<GetQuestionByTitlePaginatedQuery, Response<PaginatedResult<GetQuestionByTitlePaginatedResponse>>>
+                                       IRequestHandler<GetQuestionByTitlePaginatedQuery, Response<PaginatedResult<GetQuestionByTitlePaginatedResponse>>>,
 
 
                                         IRequestHandler<GetMoreAnswersQuery,Response<PaginatedResult<AnswerDtoForQuestionById>>>
@@ -59,7 +59,7 @@ namespace TripleA.Core.Features.Question.Queries.Handler
                 var questionMapper = mapper.Map<GetQuestionByIdDto>(question);
 
                 var joinQueryResForAnswers = answerService.getAnswersByQuestionIdPaginatedQuerable(request.QuestionId);
-                var AnswersPaginatedList = await mapper.ProjectTo<AnswerDtoForQuestionById>(joinQueryResForAnswers).ToPaginatedListAsync(1, request.answersLimit);
+                var AnswersPaginatedList = await mapper.ProjectTo<AnswerDtoForQuestionById>(joinQueryResForAnswers).ToPaginatedListAsync(1, request.answersLimit=5);
                 questionMapper.AnswersDto = AnswersPaginatedList;
 
 
@@ -67,7 +67,7 @@ namespace TripleA.Core.Features.Question.Queries.Handler
                 foreach (var answerDto in AnswersPaginatedList.Data)
                 {
                     var joinQueryResForComments = commentService.getCommentsByAnswerIdPaginatedQuerable(answerDto.Id);
-                    var CommentsPaginatedList = await mapper.ProjectTo<CommentDto>(joinQueryResForComments).ToPaginatedListAsync(1, request.commentsLimit);
+                    var CommentsPaginatedList = await mapper.ProjectTo<CommentDto>(joinQueryResForComments).ToPaginatedListAsync(1, request.commentsLimit=3);
                     answerDto.CommentsDto = CommentsPaginatedList;
 
                 }
@@ -82,7 +82,14 @@ namespace TripleA.Core.Features.Question.Queries.Handler
             var JoinQueryRes = answerService.getAnswersByQuestionIdPaginatedQuerable(request.questionId);
             if (JoinQueryRes.IsNullOrEmpty()) return NotFound<PaginatedResult<AnswerDtoForQuestionById>>();
 
-            var AnswersPaginatedList = await mapper.ProjectTo<AnswerDtoForQuestionById>(JoinQueryRes).ToPaginatedListAsync(request.PageNum, request.limit);
+            var AnswersPaginatedList = await mapper.ProjectTo<AnswerDtoForQuestionById>(JoinQueryRes).ToPaginatedListAsync(request.PageNum, request.Answerlimit=5);
+            foreach (var answerDto in AnswersPaginatedList.Data)
+            {
+                var joinQueryResForComments = commentService.getCommentsByAnswerIdPaginatedQuerable(answerDto.Id);
+                var CommentsPaginatedList = await mapper.ProjectTo<CommentDto>(joinQueryResForComments).ToPaginatedListAsync(1, request.Commentlimit=3);
+                answerDto.CommentsDto = CommentsPaginatedList;
+
+            }
             return Success(AnswersPaginatedList);
         }
 
