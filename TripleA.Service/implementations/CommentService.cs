@@ -7,6 +7,7 @@ using System.Diagnostics;
 using TripleA.Data.Entities;
 using TripleA.Infrustructure.unitOfWork;
 using TripleA.Service.Abstracts;
+using Microsoft.IdentityModel.Tokens;
 
 namespace TripleA.Service.implementations
 {
@@ -64,6 +65,29 @@ namespace TripleA.Service.implementations
         {
             var comment = await _unitOfWork.Comments.GetByIdAsync(id);
             return comment;
+        }
+
+        public IQueryable<Comment> getCommentsByAnswerIdPaginatedQuerable(int answerId)
+        {
+            var Answer = _unitOfWork.Answers.GetTableNoTracking().AsQueryable().Where(v => v.Id == answerId);
+            var comments = _unitOfWork.Comments.GetTableNoTracking().AsQueryable();
+            if (!Answer.IsNullOrEmpty() && !comments.IsNullOrEmpty())
+            {
+                var query = from a in Answer
+                            join b in comments on a.Id equals b.AnswerId
+                            select new Comment
+                            {
+                                Id = b.Id,
+                                Content=b.Content,
+                                CreatedIn = b.CreatedIn,
+                                AnswerId =b.AnswerId,
+                                UserId = b.UserId
+
+
+                            };
+                return query;
+            }
+            return Enumerable.Empty<Comment>().AsQueryable();
         }
     }
 }

@@ -17,6 +17,8 @@ namespace TripleA.Core.mapping.Questions
             CreateMap<DeleteQuestionCommand, Question>();
 
             CreateMap<Question, GetQuestionByIdDto>();
+
+    
         }
 
     }

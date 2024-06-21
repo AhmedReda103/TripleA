@@ -8,6 +8,7 @@ using System.Threading.Tasks;
 using TripleA.Core.Bases;
 using TripleA.Core.Features.Answers.Queries.Dtos;
 using TripleA.Core.Features.Category.queries.Dtos;
+using TripleA.Core.Features.Comment.Queries.Dtos;
 using TripleA.Core.Features.Question.Queries.Dtos;
 using TripleA.Core.Features.Question.Queries.Model;
 using TripleA.Core.wrappers;
@@ -46,12 +47,17 @@ namespace TripleA.Core.Features.Question.Queries.Handler
                 var questionMapper = mapper.Map<GetQuestionByIdDto>(question);
 
                 var joinQueryResForAnswers = answerService.getAnswersByQuestionIdPaginatedQuerable(request.QuestionId);
-                var AnswersPaginatedList = await mapper.ProjectTo<AnswerDto>(joinQueryResForAnswers).ToPaginatedListAsync(1, request.answersLimit);
+                var AnswersPaginatedList = await mapper.ProjectTo<AnswerDtoForQuestionById>(joinQueryResForAnswers).ToPaginatedListAsync(1, request.answersLimit);
                 questionMapper.AnswersDto = AnswersPaginatedList;
+
+
 
                 foreach (var answerDto in AnswersPaginatedList.Data)
                 {
-                  //  answerDto.CommentsDto
+                    var joinQueryResForComments = commentService.getCommentsByAnswerIdPaginatedQuerable(answerDto.Id);
+                    var CommentsPaginatedList = await mapper.ProjectTo<CommentDto>(joinQueryResForComments).ToPaginatedListAsync(1, request.commentsLimit);
+                    answerDto.CommentsDto = CommentsPaginatedList;
+
                 }
 
                 return Success(questionMapper);
