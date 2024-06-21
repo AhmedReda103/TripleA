@@ -154,5 +154,11 @@ namespace TripleA.Service.implementations
             user.Votes--;
             await unitOfWork.SaveChangesAsync();
         }
+
+        public async Task<User> GetUserByIdAsync(string userId)
+        {
+            return await unitOfWork.Users.GetByIdAsync(userId);
+
+        }
     }
 }

@@ -16,6 +16,8 @@ namespace TripleA.Service
 
             services.AddTransient<ICommentService, CommentService>();
 
+            services.AddTransient<INotificationService, NotificationService>();
+
             services.AddTransient<IFileService, FileService>();
 
             services.AddTransient<ICategoryService, CategoryService>();

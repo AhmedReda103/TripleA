@@ -43,7 +43,7 @@ namespace TripleA.Service.implementations
 
         public async Task<string> EditCategoryAsync(Category category)
         {
-            await unitOfWork.Categories.UpdateAsync(category);
+            unitOfWork.Categories.Update(category);
             await unitOfWork.SaveChangesAsync();
             return "Success";
         }
@@ -95,7 +95,7 @@ namespace TripleA.Service.implementations
                                 Image = b.Image,
                                 CreatedIn = b.CreatedIn,
                                 Answers = b.Answers,
-
+                                UserId = b.UserId
 
 
                             };

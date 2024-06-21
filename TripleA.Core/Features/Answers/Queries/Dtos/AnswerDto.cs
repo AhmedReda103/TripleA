@@ -12,6 +12,6 @@ namespace TripleA.Core.Features.Answers.Queries.Dtos
         public int? QuestionId { get; set; }
         public string? UserId { get; set; }
 
-        public virtual ICollection<CommentDto> Comments { get; set; } = new HashSet<CommentDto>();
+        public virtual ICollection<CommentDto> CommentsDto { get; set; } = new HashSet<CommentDto>();
     }
 }

@@ -23,6 +23,7 @@ namespace TripleA.Infrustructure.unitOfWork
 
         public IUserRepository Users { get; }
 
+        public INotificationRepository Notifications { get; }
 
         public UnitOfWork(
             ApplicationDbContext context,
@@ -38,6 +39,7 @@ namespace TripleA.Infrustructure.unitOfWork
             Categories = new CategoryRepository(_context);
             Users = new UserRepository(_context);
             Comments = new CommentRepository(_context);
+            Notifications = new NotificationRepository(_context);
         }
 
 

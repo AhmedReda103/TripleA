@@ -2,7 +2,6 @@
 using Microsoft.AspNetCore.Http;
 using TripleA.Data.Entities;
 
-
 namespace TripleA.Service.Abstracts
 {
     public interface IAnswerService
@@ -16,6 +15,6 @@ namespace TripleA.Service.Abstracts
         Task<string> getReplyerIdOfAnswer(int answerId);
         Task<Answer> GetAnswerByIdAsync(int Id);
         public Task<string> EditAsync(Answer answer);
-
+        IQueryable<Answer> getAnswersByQuestionIdPaginatedQuerable(int questionId);
     }
 }
