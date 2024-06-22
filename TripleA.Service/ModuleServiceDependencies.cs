@@ -22,6 +22,7 @@ namespace TripleA.Service
 
             services.AddTransient<ICategoryService, CategoryService>();
 
+            services.AddTransient<ICashingService, CashingService>();
 
             return services;
         }
