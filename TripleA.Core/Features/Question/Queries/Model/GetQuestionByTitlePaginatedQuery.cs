@@ -10,7 +10,8 @@ namespace TripleA.Core.Features.Question.Queries.Model
         public string QuestionTitle { get; set; }
         public int PageNumber { get; set; }
         public int PageSize { get; set; }
-        //public string[]? OrderBy { get; set; }
-        //public string? Search { get; set; }
+        public string? Search { get; set; }
+
+
     }
 }

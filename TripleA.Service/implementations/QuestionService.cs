@@ -96,11 +96,15 @@ namespace TripleA.Service.implementations
         public IQueryable<Question> GetQuestionByTitleQuerable(string title)
         {
             var questions = _unitOfWork.Questions.GetTableNoTracking().Where(q => q.Title == title).AsQueryable();
+
+            //  return questions;
+
             if (!questions.IsNullOrEmpty())
             {
                 var query = from b in questions
                             select new Question
                             {
+                                Id = b.Id,
                                 Title = b.Title,
                                 Description = b.Description,
                                 Image = b.Image,
