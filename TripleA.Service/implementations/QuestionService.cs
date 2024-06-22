@@ -110,6 +110,7 @@ namespace TripleA.Service.implementations
                                 Image = b.Image,
                                 CreatedIn = b.CreatedIn,
                                 Category = b.Category,
+                                UserId = b.UserId,
                                 user = b.user,
                             };
                 return query;

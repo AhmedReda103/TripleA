@@ -9,7 +9,7 @@ namespace TripleA.Api.Controllers
     public class ApplicationUserController : AppControllerBase
     {
         [HttpPost(Router.ApplicationUserRouting.Create)]
-        public async Task<IActionResult> Create([FromForm] AddUserCommand command)
+        public async Task<IActionResult> Create([FromBody] AddUserCommand command)
         {
             var response = await Mediator.Send(command);
             return NewResult(response);
@@ -24,6 +24,17 @@ namespace TripleA.Api.Controllers
 
         }
 
+        [HttpPost("/logout")]
+        public async Task<IActionResult> Logout()
+        {
+            var response = await Mediator.Send(new LogoutCommand());
+            return NewResult(response);
+        }
+
+        //[HttpGet("{id}")]
+        //public async Task<IActionResult> Get(int id)
+        //{
+        //    return NewResult(await Mediator.Send(new GetUserByIdQuery { UserId = id }));
         [HttpGet("{id}")]
         public async Task<IActionResult> Get(string id)
         {

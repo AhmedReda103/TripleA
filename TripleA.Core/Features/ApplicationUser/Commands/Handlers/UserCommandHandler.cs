@@ -12,6 +12,7 @@ namespace TripleA.Core.Features.ApplicationUser.Commands.Handlers
 {
     public class UserCommandHandler : ResponseHandler, IRequestHandler<AddUserCommand, Response<string>>
         , IRequestHandler<SignInCommand, Response<JwtAuthResult>>
+        , IRequestHandler<LogoutCommand, Response<string>>
     {
 
         private readonly IMapper _mapper;
@@ -78,7 +79,11 @@ namespace TripleA.Core.Features.ApplicationUser.Commands.Handlers
             }
         }
 
-
+        public async Task<Response<string>> Handle(LogoutCommand request, CancellationToken cancellationToken)
+        {
+            await _signInManager.SignOutAsync();
+            return Success("Successfully logged out");
+        }
 
     }
 }
