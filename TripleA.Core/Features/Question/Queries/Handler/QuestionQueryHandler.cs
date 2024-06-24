@@ -28,43 +28,53 @@ namespace TripleA.Core.Features.Question.Queries.Handler
         private readonly IQuestionService questionService;
         private readonly IAnswerService answerService;
         private readonly ICommentService commentService;
+        private readonly ICashingService cashingService;
+
 
         public QuestionQueryHandler(IMapper mapper,
                                     IQuestionService questionService,
                                     IAnswerService answerService,
-                                    ICommentService commentService)
+                                    ICommentService commentService,
+                                    ICashingService cashingService)
         {
             this.mapper = mapper;
             this.questionService = questionService;
             this.answerService = answerService;
             this.commentService = commentService;
+            this.cashingService = cashingService;
         }
 
         public async Task<Response<GetQuestionByIdDto>> Handle(GetQuestionsByIdQuery request, CancellationToken cancellationToken)
         {
+            /*           var key = "GetQuestionsByIdQuery" + request.QuestionId;
+                       var cashingData = await cashingService.GetData<GetQuestionByIdDto>(key);
+                       if (cashingData != null)
+                       {
+                           return Success(cashingData);
+                       }*/
+
             var question = await questionService.GetByIDAsync(request.QuestionId);
             if (question == null)
                 return NotFound<GetQuestionByIdDto>();
-            else
+
+            var questionMapper = mapper.Map<GetQuestionByIdDto>(question);
+            var joinQueryResForAnswers = answerService.getAnswersByQuestionIdPaginatedQuerable(request.QuestionId);
+            var AnswersPaginatedList = await mapper.ProjectTo<AnswerDtoForQuestionById>(joinQueryResForAnswers).ToPaginatedListAsync(1, request.answersLimit = 5);
+            questionMapper.AnswersDto = AnswersPaginatedList;
+
+
+
+            foreach (var answerDto in AnswersPaginatedList.Data)
             {
-                var questionMapper = mapper.Map<GetQuestionByIdDto>(question);
+                var joinQueryResForComments = commentService.getCommentsByAnswerIdPaginatedQuerable(answerDto.Id);
+                var CommentsPaginatedList = await mapper.ProjectTo<CommentDto>(joinQueryResForComments).ToPaginatedListAsync(1, request.commentsLimit = 3);
+                answerDto.CommentsDto = CommentsPaginatedList;
 
-                var joinQueryResForAnswers = answerService.getAnswersByQuestionIdPaginatedQuerable(request.QuestionId);
-                var AnswersPaginatedList = await mapper.ProjectTo<AnswerDtoForQuestionById>(joinQueryResForAnswers).ToPaginatedListAsync(1, request.answersLimit = 5);
-                questionMapper.AnswersDto = AnswersPaginatedList;
-
-
-
-                foreach (var answerDto in AnswersPaginatedList.Data)
-                {
-                    var joinQueryResForComments = commentService.getCommentsByAnswerIdPaginatedQuerable(answerDto.Id);
-                    var CommentsPaginatedList = await mapper.ProjectTo<CommentDto>(joinQueryResForComments).ToPaginatedListAsync(1, request.commentsLimit = 3);
-                    answerDto.CommentsDto = CommentsPaginatedList;
-
-                }
-
-                return Success(questionMapper);
             }
+
+            // cashingService.setData(key, questionMapper, TimeSpan.FromMinutes(1));
+
+            return Success(questionMapper);
 
         }
 
