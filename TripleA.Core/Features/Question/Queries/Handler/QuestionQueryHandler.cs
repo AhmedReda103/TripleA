@@ -28,20 +28,21 @@ namespace TripleA.Core.Features.Question.Queries.Handler
         private readonly IQuestionService questionService;
         private readonly IAnswerService answerService;
         private readonly ICommentService commentService;
-        private readonly ICashingService cashingService;
+        //  private readonly ICashingService cashingService;
 
 
         public QuestionQueryHandler(IMapper mapper,
                                     IQuestionService questionService,
                                     IAnswerService answerService,
-                                    ICommentService commentService,
-                                    ICashingService cashingService)
+                                    ICommentService commentService
+                                  //  ICashingService cashingService
+                                  )
         {
             this.mapper = mapper;
             this.questionService = questionService;
             this.answerService = answerService;
             this.commentService = commentService;
-            this.cashingService = cashingService;
+            //  this.cashingService = cashingService;
         }
 
         public async Task<Response<GetQuestionByIdDto>> Handle(GetQuestionsByIdQuery request, CancellationToken cancellationToken)
