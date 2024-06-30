@@ -98,7 +98,7 @@ namespace TripleA.Service.implementations
                 querable = querable.Where(x => x.Title.Contains(search) || x.Category.Name.Contains(search));
 
             }
-            return querable;
+            return querable.OrderByDescending(c => c.CreatedIn);
         }
 
         public IQueryable<Question> GetQuestionByTitleQuerable(string title)

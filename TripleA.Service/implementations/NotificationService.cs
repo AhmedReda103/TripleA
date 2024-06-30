@@ -32,7 +32,7 @@ namespace TripleA.Service.implementations
         public async Task<List<Notification>> GetNotificationsForAsker(string userId)
         {
             var notifications = await unitOfWork.Notifications.GetAllAsync();
-            return notifications.Where(n => n.UserId == userId).ToList();
+            return notifications.Where(n => n.UserId == userId).OrderByDescending(n => n.CreatedIn).ToList();
         }
     }
 }
