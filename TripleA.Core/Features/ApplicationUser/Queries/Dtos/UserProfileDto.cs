@@ -13,6 +13,7 @@ namespace TripleA.Core.Features.ApplicationUser.Queries.Dtos
         public string UserName { get; set; }
         
         public List<UserProfileAnswersDto> UserProfileAnswers { get; set; }
+        public List<UserProfileQuestionsDto> UserProfileQuestions { get; set; }
     }
 
     

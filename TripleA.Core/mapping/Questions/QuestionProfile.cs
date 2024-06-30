@@ -1,4 +1,5 @@
 ﻿using AutoMapper;
+using TripleA.Core.Features.ApplicationUser.Queries.Dtos;
 using TripleA.Core.Features.Question.Commands.Models;
 using TripleA.Core.Features.Question.Queries.Dtos;
 using TripleA.Data.Entities;
@@ -25,6 +26,8 @@ namespace TripleA.Core.mapping.Questions
             CreateMap<DeleteQuestionCommand, Question>();
 
             CreateMap<Question, GetQuestionByIdDto>();
+            CreateMap<Question, UserProfileQuestionsDto>();
+            
 
 
         }

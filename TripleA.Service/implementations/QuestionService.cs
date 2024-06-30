@@ -126,10 +126,10 @@ namespace TripleA.Service.implementations
             return Enumerable.Empty<Question>().AsQueryable();
         }
 
-        //public async Task<Question> GetQuestionWithAnswersAndCommentsAsync(int questionId, int answersLimit, int commentsLimit)
-        //{
-        //    var questions = await _unitOfWork.Questions.GetByIdAsync(questionId);
-        //}
+        public async Task<IEnumerable<Question>> GetQuestionsOfUser(string userId)
+        {
+            return await _unitOfWork.Questions.FindAllAsync(a => a.UserId == userId);
+        }
 
     }
 }

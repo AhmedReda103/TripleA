@@ -20,14 +20,17 @@ namespace TripleA.Core.Features.ApplicationUser.Queries.Handler
         private readonly IMapper mapper;
         private readonly IApplicationUserService applicationUserService;
         private readonly IAnswerService answerService;
+        private readonly IQuestionService questionService;
 
         public UserQueryHandler(IMapper mapper,
                                 IApplicationUserService applicationUserService,
-                                IAnswerService answerService)
+                                IAnswerService answerService,
+                                IQuestionService questionService)
         {
             this.mapper = mapper;
             this.applicationUserService = applicationUserService;
             this.answerService = answerService;
+            this.questionService = questionService;
         }
         public async Task<Response<UserDto>> Handle(GetUserByIdQuery request, CancellationToken cancellationToken)
         {
@@ -50,7 +53,10 @@ namespace TripleA.Core.Features.ApplicationUser.Queries.Handler
 
             var answers = await answerService.GetAnswersOfUser(user.Id);
 
+            var questions = await questionService.GetQuestionsOfUser(user.Id);
+
             userProfileMapper.UserProfileAnswers = mapper.Map<List<UserProfileAnswersDto>>(answers);
+            userProfileMapper.UserProfileQuestions = mapper.Map<List<UserProfileQuestionsDto>>(questions);
 
             return Success(userProfileMapper);
 
