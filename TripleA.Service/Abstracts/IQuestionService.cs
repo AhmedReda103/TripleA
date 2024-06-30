@@ -5,7 +5,7 @@ namespace TripleA.Service.Abstracts
 {
     public interface IQuestionService
     {
-        Task<string> AddQuestion(Question question, IFormFile file);
+        Task<string> AddQuestion(Question question, IFormFile? file = null);
 
         public Task<string> DeleteAsync(Question question);
         public Task<Question> GetByIDAsync(int id);

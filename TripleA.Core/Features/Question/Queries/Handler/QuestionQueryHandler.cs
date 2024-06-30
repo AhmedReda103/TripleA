@@ -28,20 +28,28 @@ namespace TripleA.Core.Features.Question.Queries.Handler
         private readonly IQuestionService questionService;
         private readonly IAnswerService answerService;
         private readonly ICommentService commentService;
-        private readonly ICashingService cashingService;
+
+        // private readonly ICashingService cashingService;
 
 
         public QuestionQueryHandler(IMapper mapper,
                                     IQuestionService questionService,
                                     IAnswerService answerService,
-                                    ICommentService commentService)//,
-                                   // ICashingService cashingService)
+
+                                    ICommentService commentService
+
+                                    /*ICashingService cashingService*/)
+
+
         {
             this.mapper = mapper;
             this.questionService = questionService;
             this.answerService = answerService;
             this.commentService = commentService;
-           // this.cashingService = cashingService;
+
+
+            /*this.cashingService = cashingService;*/
+
         }
 
         public async Task<Response<GetQuestionByIdDto>> Handle(GetQuestionsByIdQuery request, CancellationToken cancellationToken)
@@ -59,7 +67,7 @@ namespace TripleA.Core.Features.Question.Queries.Handler
 
             var questionMapper = mapper.Map<GetQuestionByIdDto>(question);
             var joinQueryResForAnswers = answerService.getAnswersByQuestionIdPaginatedQuerable(request.QuestionId);
-            var AnswersPaginatedList = await mapper.ProjectTo<AnswerDtoForQuestionById>(joinQueryResForAnswers).ToPaginatedListAsync(1, request.answersLimit = 5);
+            var AnswersPaginatedList = mapper.ProjectTo<AnswerDtoForQuestionById>(joinQueryResForAnswers).ToPaginatedList(1, request.answersLimit = 5);
             questionMapper.AnswersDto = AnswersPaginatedList;
 
 
@@ -67,7 +75,7 @@ namespace TripleA.Core.Features.Question.Queries.Handler
             foreach (var answerDto in AnswersPaginatedList.Data)
             {
                 var joinQueryResForComments = commentService.getCommentsByAnswerIdPaginatedQuerable(answerDto.Id);
-                var CommentsPaginatedList = await mapper.ProjectTo<CommentDto>(joinQueryResForComments).ToPaginatedListAsync(1, request.commentsLimit = 3);
+                var CommentsPaginatedList = mapper.ProjectTo<CommentDto>(joinQueryResForComments).ToPaginatedList(1, request.commentsLimit = 3);
                 answerDto.CommentsDto = CommentsPaginatedList;
 
             }
@@ -82,12 +90,12 @@ namespace TripleA.Core.Features.Question.Queries.Handler
         {
             var JoinQueryRes = answerService.getAnswersByQuestionIdPaginatedQuerable(request.questionId);
             if (JoinQueryRes.IsNullOrEmpty()) return NotFound<PaginatedResult<AnswerDtoForQuestionById>>();
-
-            var AnswersPaginatedList = await mapper.ProjectTo<AnswerDtoForQuestionById>(JoinQueryRes).ToPaginatedListAsync(request.PageNum, request.Answerlimit = 5);
+            JoinQueryRes = JoinQueryRes.OrderByDescending(n => n.CreatedIn);
+            var AnswersPaginatedList = mapper.ProjectTo<AnswerDtoForQuestionById>(JoinQueryRes).ToPaginatedList(request.PageNum, request.Answerlimit = 5);
             foreach (var answerDto in AnswersPaginatedList.Data)
             {
                 var joinQueryResForComments = commentService.getCommentsByAnswerIdPaginatedQuerable(answerDto.Id);
-                var CommentsPaginatedList = await mapper.ProjectTo<CommentDto>(joinQueryResForComments).ToPaginatedListAsync(1, request.Commentlimit = 3);
+                var CommentsPaginatedList = mapper.ProjectTo<CommentDto>(joinQueryResForComments).ToPaginatedList(1, request.Commentlimit = 3);
                 answerDto.CommentsDto = CommentsPaginatedList;
 
             }
@@ -97,7 +105,8 @@ namespace TripleA.Core.Features.Question.Queries.Handler
         public async Task<Response<PaginatedResult<CommentDto>>> Handle(GetMoreCommentsQuery request, CancellationToken cancellationToken)
         {
             var joinQueryResForComments = commentService.getCommentsByAnswerIdPaginatedQuerable(request.answerId);
-            var CommentsPaginatedList = await mapper.ProjectTo<CommentDto>(joinQueryResForComments).ToPaginatedListAsync(request.PageNum, request.Commentlimit = 3);
+            joinQueryResForComments = joinQueryResForComments.OrderByDescending(n => n.CreatedIn);
+            var CommentsPaginatedList = mapper.ProjectTo<CommentDto>(joinQueryResForComments).ToPaginatedList(request.PageNum, request.Commentlimit = 3);
             return Success(CommentsPaginatedList);
         }
 

@@ -1,4 +1,5 @@
-﻿using TripleA.Data.Entities;
+﻿using Microsoft.EntityFrameworkCore;
+using TripleA.Data.Entities;
 using TripleA.Infrustructure.unitOfWork;
 using TripleA.Service.Abstracts;
 
@@ -32,7 +33,28 @@ namespace TripleA.Service.implementations
         public async Task<List<Notification>> GetNotificationsForAsker(string userId)
         {
             var notifications = await unitOfWork.Notifications.GetAllAsync();
-            return notifications.Where(n => n.UserId == userId).ToList();
+            return notifications.Where(n => n.UserId == userId).OrderByDescending(n => n.CreatedIn).ToList();
         }
+
+        public async Task<string> UpdateReadNotificationAsync()
+        {
+            try
+            {
+                var notifications = await unitOfWork.Notifications.GetAllAsync();
+                foreach (var notification in notifications)
+                {
+                    notification.IsRead = true;
+                    unitOfWork._context.Entry(notification).State = EntityState.Modified;
+                }
+                await unitOfWork.SaveChangesAsync();
+                return "Updated";
+            }
+            catch (Exception ex)
+            {
+                return "updating Notification Failed " + ex.Message;
+            }
+        }
+
+
     }
 }

@@ -42,6 +42,8 @@ namespace TripleA.Infrustructure.Context
         public DbSet<Answer> Answers { get; set; }
         public DbSet<Comment> Comments { get; set; }
         public DbSet<Notification> Notifications { get; set; }
+        public DbSet<UserCon> UserCons { get; set; }
+        public DbSet<Advertisement> Advertisements { get; set; }
 
     }
 }

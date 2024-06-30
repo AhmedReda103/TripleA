@@ -12,19 +12,27 @@ namespace TripleA.Service.implementations
     {
         private readonly IUnitOfWork _unitOfWork;
         private readonly IFileService fileService;
+        private readonly IPhotoService photoService;
 
-        public QuestionService(IUnitOfWork unitOfWork, IFileService fileService)
+        public QuestionService(IUnitOfWork unitOfWork, IFileService fileService, IPhotoService photoService)
         {
 
             _unitOfWork = unitOfWork;
             this.fileService = fileService;
+            this.photoService = photoService;
         }
-        public async Task<string> AddQuestion(Question question, IFormFile file)
+        public async Task<string> AddQuestion(Question question, IFormFile? file = null)
         {
+            if (file != null)
+            {
+                var result = await photoService.AddPhotoAsync(file);
+                fileService.SetQuestionFilePath(result.StatusCode, result.Url.ToString(), question);
+            }
+            else
+            {
+                question.Image = "NoFile";
+            }
 
-            var fileUrl = await fileService.UploadFile("Question", file);
-
-            fileService.SetQuestionFilePath(fileUrl, question);
 
             await _unitOfWork.Questions.AddAsync(question);
             await _unitOfWork.SaveChangesAsync();
@@ -90,7 +98,7 @@ namespace TripleA.Service.implementations
                 querable = querable.Where(x => x.Title.Contains(search) || x.Category.Name.Contains(search));
 
             }
-            return querable;
+            return querable.OrderByDescending(c => c.CreatedIn);
         }
 
         public IQueryable<Question> GetQuestionByTitleQuerable(string title)

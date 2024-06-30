@@ -5,9 +5,9 @@ using TripleA.Data.Entities;
 
 namespace TripleA.Core.mapping.Answers
 {
-    public class AnswerProfile : Profile
+    public class AdvertismentProfile : Profile
     {
-        public AnswerProfile()
+        public AdvertismentProfile()
         {
             CreateMap<AddAnswerCommand, Answer>();
             CreateMap<Answer, AnswerDto>();

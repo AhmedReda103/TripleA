@@ -6,5 +6,7 @@ namespace TripleA.Service.Abstracts
     {
         public Task<List<Notification>> GetNotificationsForAsker(string userId);
         public Task<string> addNotificationAsync(Notification notification);
+        public Task<string> UpdateReadNotificationAsync();
+
     }
 }

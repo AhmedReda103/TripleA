@@ -1,6 +1,7 @@
 ﻿using AutoMapper;
 using MediatR;
 using Microsoft.AspNetCore.SignalR;
+using System.Net;
 using TripleA.Core.Bases;
 using TripleA.Core.Features.Answers.Commands.Models;
 using TripleA.Core.Resources;
@@ -26,6 +27,11 @@ namespace TripleA.Core.Features.Answers.Commands.Handler
         private readonly IQuestionService questionService;
         private readonly IHubContext<RealTimeService> realTimeService;
         private readonly IFileService fileService;
+        private readonly IPhotoService photoService;
+        private readonly IUserConService userService;
+
+
+
 
         public AnswerCommandHandler(IMapper mapper,
                                     IAnswerService answerService,
@@ -33,7 +39,9 @@ namespace TripleA.Core.Features.Answers.Commands.Handler
                                     IHubContext<RealTimeService> realTimeService,
                                     IFileService fileService,
                                     INotificationService notificationService,
-                                    IQuestionService questionService)
+                                    IQuestionService questionService,
+                                    IPhotoService photoService,
+                                    IUserConService userService)
         {
             this.mapper = mapper;
             this.answerService = answerService;
@@ -42,6 +50,9 @@ namespace TripleA.Core.Features.Answers.Commands.Handler
             this.fileService = fileService;
             this.notificationService = notificationService;
             this.questionService = questionService;
+            this.photoService = photoService;
+            this.userService = userService;
+
         }
 
 
@@ -52,7 +63,15 @@ namespace TripleA.Core.Features.Answers.Commands.Handler
             AnswerMapper.UserId = UserId;
 
             AnswerMapper.CreatedIn = DateTime.Now;
-            var result = await answerService.AddAnswer(AnswerMapper, request.Image);
+            string? result = null;
+            if (request?.Image != null)
+            {
+                result = await answerService.AddAnswer(AnswerMapper, request.Image);
+            }
+            else
+            {
+                result = await answerService.AddAnswer(AnswerMapper);
+            }
 
             var AskerId = questionService.GetByIDAsync(request.QuestionId).Result.UserId;
             //var AskerId = AnswerMapper?.Question?.user.Id;
@@ -69,18 +88,18 @@ namespace TripleA.Core.Features.Answers.Commands.Handler
                     Responder = ResponderName
 
                 };
+
                 await notificationService.addNotificationAsync(notification);
-                try
+
+                var userCon = userService.GetAll().Result.FirstOrDefault(u => u.UserId == AskerId);
+                if (userCon != null)
                 {
-                    await realTimeService.Clients.User(AskerId).SendAsync("ReceiveNotification", notification);
-                    return Created("");
+                    var socket = realTimeService.Clients.Client(userCon.UserConnection);
+                    await socket.SendAsync("receivenotification", $"{ResponderName} make answer on question id {request.QuestionId}");
                 }
-                catch (Exception ex)
-                {
-                    // Log the error
-                    Console.WriteLine($"Error sending notification: {ex.Message}");
-                    return BadRequest<string>("Error sending notification.");
-                }
+
+                return Created("");
+
             }
             else return BadRequest<string>();
         }
@@ -110,6 +129,8 @@ namespace TripleA.Core.Features.Answers.Commands.Handler
             //return NotFound
             if (answer == null) return NotFound<string>();
             //Call service that make Delete
+            if (answer.Image != null)
+                await photoService.DeletePhotoAsync(answer.Image);
             var result = await answerService.DeleteAsync(answer);
             if (result == "Success") return Deleted<string>();
             else return BadRequest<string>();
@@ -125,6 +146,28 @@ namespace TripleA.Core.Features.Answers.Commands.Handler
             if (request.Image != null)
             {
                 string imagePath = answer.Image;
+                // var deleted = fileService.DeleteFile(imagePath);
+                var deleted = await photoService.DeletePhotoAsync(imagePath);
+
+                if (deleted.StatusCode == HttpStatusCode.OK)
+                {
+                    //var fileUrl = await fileService.UploadFile("Question", request.Image);
+                    var resultURL = await photoService.AddPhotoAsync(request.Image);
+                    var fileUrl = resultURL.Url.ToString();
+                    if (resultURL.StatusCode == HttpStatusCode.OK)
+                    {
+                        request.ImagePath = fileUrl;
+                    }
+                    else
+                    {
+                        request.ImagePath = null;
+                    }
+                }
+            }
+
+            /*if (request.Image != null)
+            {
+                string imagePath = answer.Image;
                 var deleted = fileService.DeleteFile(imagePath);
                 if (deleted)
                 {
@@ -138,7 +181,7 @@ namespace TripleA.Core.Features.Answers.Commands.Handler
                         request.ImagePath = null;
                     }
                 }
-            }
+            }*/
 
             //mapping Between request and question
             var questionMapper = mapper.Map(request, answer);

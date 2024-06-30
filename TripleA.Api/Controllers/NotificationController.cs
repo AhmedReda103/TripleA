@@ -1,5 +1,6 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using TripleA.Api.Base;
+using TripleA.Core.Features.notification.Commands.Models;
 using TripleA.Core.Features.Question.Queries.Model;
 
 namespace TripleA.Api.Controllers
@@ -14,5 +15,12 @@ namespace TripleA.Api.Controllers
         {
             return NewResult(await Mediator.Send(new GetNotificationsByIdQuery { AskerId = userId }));
         }
+
+        [HttpPatch()]
+        public async Task<IActionResult> SetNotificationsRead()
+        {
+            return NewResult(await Mediator.Send(new UpdateNotificationCommand()));
+        }
+
     }
 }
