@@ -2,6 +2,7 @@
 using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.Logging;
 using System.Diagnostics;
+using System.Net;
 using TripleA.Data.Entities;
 using TripleA.Service.Abstracts;
 
@@ -27,7 +28,7 @@ namespace TripleA.Service.implementations
                 return "NOFile";
             }
 
-            var path = _webHostEnvironment.WebRootPath + "/" + location + "/";
+            var path = _webHostEnvironment.WebRootPath + '/' + location + '/';
             var extention = Path.GetExtension(file.FileName);
             var fileName = Guid.NewGuid().ToString().Replace("-", string.Empty) + extention;
             if (file.Length > 0)
@@ -84,11 +85,11 @@ namespace TripleA.Service.implementations
             }
         }
 
-        public void SetQuestionFilePath(string fileUrl, Question question)
+        public void SetQuestionFilePath(HttpStatusCode statusCode, string fileUrl, Question question)
         {
-            if (fileUrl == "NoFile" || fileUrl == "FailedToUploadFile")
+            if (statusCode == HttpStatusCode.NoContent || statusCode == HttpStatusCode.NotFound)
             {
-                question.Image = fileUrl;
+                question.Image = "NoFile";
             }
             else
             {
