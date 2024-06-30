@@ -28,6 +28,7 @@ namespace TripleA.Core.Features.Question.Queries.Handler
         private readonly IQuestionService questionService;
         private readonly IAnswerService answerService;
         private readonly ICommentService commentService;
+
         // private readonly ICashingService cashingService;
 
 
@@ -35,12 +36,15 @@ namespace TripleA.Core.Features.Question.Queries.Handler
                                     IQuestionService questionService,
                                     IAnswerService answerService,
                                     ICommentService commentService
+
                                     /*ICashingService cashingService*/)
+
         {
             this.mapper = mapper;
             this.questionService = questionService;
             this.answerService = answerService;
             this.commentService = commentService;
+
             /*this.cashingService = cashingService;*/
         }
 

@@ -1,4 +1,4 @@
-﻿using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.DependencyInjection;
 using TripleA.Service.Abstracts;
 using TripleA.Service.implementations;
 
@@ -25,6 +25,9 @@ namespace TripleA.Service
             services.AddScoped<IPhotoService, PhotoService>();
 
             services.AddScoped<IUserConService, UserConService>();
+
+            //services.AddTransient<ICashingService, CashingService>();
+
 
             return services;
         }
