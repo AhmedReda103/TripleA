@@ -12,18 +12,18 @@ namespace TripleA.Core.Features.Comment.Queries.Handler
     {
         private readonly IMapper mapper;
         private readonly ICommentService commentService;
-        private readonly ICashingService cashingService;
-        public CommentQueryHandler(IMapper mapper, ICommentService commentService, ICashingService cashingService)
+        // private readonly ICashingService cashingService;
+        public CommentQueryHandler(IMapper mapper, ICommentService commentService /*ICashingService cashingService*/)
         {
             this.mapper = mapper;
             this.commentService = commentService;
-            this.cashingService = cashingService;
+            //this.cashingService = cashingService;
         }
 
         public async Task<Response<GetCommentByIdDto>> Handle(GetCommentByIdQuery request, CancellationToken cancellationToken)
         {
             var key = "GetQuestionsByIdQuery" + request.Id;
-            var cashingData = await cashingService.GetData<GetCommentByIdDto>(key);
+            // var cashingData = await cashingService.GetData<GetCommentByIdDto>(key);
             /* if (cashingData != null)
              {
                  return Success(cashingData);

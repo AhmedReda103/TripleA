@@ -2,6 +2,7 @@ using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using TripleA.Core;
 using TripleA.Data.Entities.Identity;
+using TripleA.Data.Helpers;
 using TripleA.Infrustructure;
 using TripleA.Infrustructure.Context;
 using TripleA.Infrustructure.seeder;
@@ -26,6 +27,9 @@ builder.Services.AddSwaggerGen();
 builder.Services.AddDbContext<ApplicationDbContext>(
     option => option.UseLazyLoadingProxies().UseSqlServer(builder.Configuration.GetConnectionString("Connection"))
 );
+
+builder.Services.Configure<CloudinarySettings>(builder.Configuration.GetSection("CloudinarySettings"));
+
 
 builder.Services.AddCors(corsOptions =>
 {
@@ -61,10 +65,11 @@ using (var scope = app.Services.CreateScope())
 
 app.UseCors("MyPolicy");
 
-app.UseRouting();
 
 app.UseHttpsRedirection();
 app.UseStaticFiles();
+
+app.UseRouting();
 
 app.UseAuthentication();
 

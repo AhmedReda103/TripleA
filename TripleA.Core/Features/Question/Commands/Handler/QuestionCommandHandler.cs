@@ -1,5 +1,6 @@
 ﻿using AutoMapper;
 using MediatR;
+using System.Net;
 using TripleA.Core.Bases;
 using TripleA.Core.Features.Question.Commands.Models;
 using TripleA.Service.Abstracts;
@@ -15,17 +16,21 @@ namespace TripleA.Core.Features.Question.Commands.Handlers
         private readonly IQuestionService questionService;
         private readonly IApplicationUserService applicationUserService;
         private readonly IFileService fileService;
+        private readonly IPhotoService photoService;
+
 
 
         public QuestionCommandHandler(IMapper mapper,
                                       IQuestionService questionService,
                                       IApplicationUserService applicationUserService,
-                                      IFileService fileService)
+                                      IFileService fileService,
+                                      IPhotoService photoService)
         {
             this.mapper = mapper;
             this.questionService = questionService;
             this.applicationUserService = applicationUserService;
             this.fileService = fileService;
+            this.photoService = photoService;
         }
 
         public async Task<Response<string>> Handle(AddQuestionCommand request, CancellationToken cancellationToken)
@@ -50,6 +55,9 @@ namespace TripleA.Core.Features.Question.Commands.Handlers
             if (question == null)
                 return NotFound<string>();
             // Call service that make Delete
+
+            if (question.Image != null || question.Image == "NoFile")
+                await photoService.DeletePhotoAsync(question.Image);
             var result = await questionService.DeleteAsync(question);
             if (result == "Success") return Deleted<string>();
             else return BadRequest<string>();
@@ -65,11 +73,15 @@ namespace TripleA.Core.Features.Question.Commands.Handlers
             if (request.Image != null)
             {
                 string imagePath = question.Image;
-                var deleted = fileService.DeleteFile(imagePath);
-                if (deleted)
+                // var deleted = fileService.DeleteFile(imagePath);
+                var deleted = await photoService.DeletePhotoAsync(imagePath);
+
+                if (deleted.StatusCode == HttpStatusCode.OK)
                 {
-                    var fileUrl = await fileService.UploadFile("Question", request.Image);
-                    if (fileUrl != "FailedToUploadFile")
+                    //var fileUrl = await fileService.UploadFile("Question", request.Image);
+                    var resultURL = await photoService.AddPhotoAsync(request.Image);
+                    var fileUrl = resultURL.Url.ToString();
+                    if (resultURL.StatusCode == HttpStatusCode.OK)
                     {
                         request.ImagePath = fileUrl;
                     }
