@@ -14,7 +14,8 @@ using TripleA.Service.Abstracts;
 namespace TripleA.Core.Features.ApplicationUser.Queries.Handler
 {
     public class UserQueryHandler : ResponseHandler,
-                                    IRequestHandler<GetUserByIdQuery, Response<UserDto>>
+                                    IRequestHandler<GetUserByIdQuery, Response<UserDto>>,
+                                    IRequestHandler<GetUserProfileByIdQuery, Response<UserProfileDto>>
     {
         private readonly IMapper mapper;
         private readonly IApplicationUserService applicationUserService;

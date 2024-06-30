@@ -41,5 +41,12 @@ namespace TripleA.Api.Controllers
             return NewResult(await Mediator.Send(new GetUserByIdQuery { UserId = id }));
 
         }
+
+        [HttpGet("userprofile/{id}")]
+        public async Task<IActionResult> GetProfile(string id)
+        {
+            return NewResult(await Mediator.Send(new GetUserProfileByIdQuery { UserId = id }));
+
+        }
     }
 }
