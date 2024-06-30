@@ -16,6 +16,7 @@ namespace TripleA.Infrustructure.unitOfWork
         public ICommentRepository Comments { get; }
         public ICategoryRepository Categories { get; }
         public INotificationRepository Notifications { get; }
+        public IAdvertisementRepository Advertisements { get; }
         public IUserRepository Users { get; }
         ApplicationDbContext _context { get; }
 
