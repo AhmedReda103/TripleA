@@ -22,6 +22,9 @@ namespace TripleA.Service
 
             services.AddTransient<ICategoryService, CategoryService>();
 
+            services.AddScoped<IPhotoService, PhotoService>();
+
+            services.AddScoped<IUserConService, UserConService>();
 
             return services;
         }

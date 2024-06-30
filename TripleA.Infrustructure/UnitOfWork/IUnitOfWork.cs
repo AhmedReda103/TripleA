@@ -12,6 +12,7 @@ namespace TripleA.Infrustructure.unitOfWork
         public RoleManager<IdentityRole> _roleManager { get; }
         public IQuestionRepository Questions { get; }
         public IAnswerRepository Answers { get; }
+        public IUserConRepository userCons { get; }
         public ICommentRepository Comments { get; }
         public ICategoryRepository Categories { get; }
         public INotificationRepository Notifications { get; }
