@@ -40,8 +40,15 @@ namespace TripleA.Core.Features.Question.Commands.Handlers
             QuestionMapper.UserId = UserId;
 
             QuestionMapper.CreatedIn = DateTime.Now;
-
-            var result = await questionService.AddQuestion(QuestionMapper, request.Image);
+            string? result = null;
+            if (request?.Image != null)
+            {
+                result = await questionService.AddQuestion(QuestionMapper, request.Image);
+            }
+            else
+            {
+                result = await questionService.AddQuestion(QuestionMapper);
+            }
 
             if (result == "Added")
                 return Created("");

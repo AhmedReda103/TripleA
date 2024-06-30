@@ -63,7 +63,15 @@ namespace TripleA.Core.Features.Answers.Commands.Handler
             AnswerMapper.UserId = UserId;
 
             AnswerMapper.CreatedIn = DateTime.Now;
-            var result = await answerService.AddAnswer(AnswerMapper, request.Image);
+            string? result = null;
+            if (request?.Image != null)
+            {
+                result = await answerService.AddAnswer(AnswerMapper, request.Image);
+            }
+            else
+            {
+                result = await answerService.AddAnswer(AnswerMapper);
+            }
 
             var AskerId = questionService.GetByIDAsync(request.QuestionId).Result.UserId;
             //var AskerId = AnswerMapper?.Question?.user.Id;
@@ -82,9 +90,12 @@ namespace TripleA.Core.Features.Answers.Commands.Handler
                 };
 
                 await notificationService.addNotificationAsync(notification);
-                var userCon = userService.GetAll().Result.FirstOrDefault(u => u.UserId == AskerId).UserConnection;
-                var socket = realTimeService.Clients.Client(userCon);
-                await socket.SendAsync("receivenotification", $"{ResponderName} make answer on question id {request.QuestionId}");
+                var userCon = userService.GetAll().Result.FirstOrDefault(u => u.UserId == AskerId);
+                if (userCon != null)
+                {
+                    var socket = realTimeService.Clients.Client(userCon.UserConnection);
+                    await socket.SendAsync("receivenotification", $"{ResponderName} make answer on question id {request.QuestionId}");
+                }
 
                 return Created("");
             }
