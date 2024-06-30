@@ -15,7 +15,7 @@ namespace TripleA.Service.Abstracts
 
         public IQueryable<Question> FilliterQuestionsPaginatedQuerable(string search);
 
-
+        public  Task<IEnumerable<Question>> GetQuestionsOfUser(string userId);
         //Task<string> DeleteAsync(Question question);
 
         //Task<Question> GetByIDAsync(int id);
