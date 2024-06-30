@@ -70,8 +70,17 @@ namespace TripleA.Core.Features.Answers.Commands.Handler
 
                 };
                 await notificationService.addNotificationAsync(notification);
-                await realTimeService.Clients.User(AskerId).SendAsync("ReceiveNotification", notification);
-                return Created("");
+                try
+                {
+                    await realTimeService.Clients.User(AskerId).SendAsync("ReceiveNotification", notification);
+                    return Created("");
+                }
+                catch (Exception ex)
+                {
+                    // Log the error
+                    Console.WriteLine($"Error sending notification: {ex.Message}");
+                    return BadRequest<string>("Error sending notification.");
+                }
             }
             else return BadRequest<string>();
         }
