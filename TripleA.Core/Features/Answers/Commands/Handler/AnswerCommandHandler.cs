@@ -90,6 +90,7 @@ namespace TripleA.Core.Features.Answers.Commands.Handler
                 };
 
                 await notificationService.addNotificationAsync(notification);
+
                 var userCon = userService.GetAll().Result.FirstOrDefault(u => u.UserId == AskerId);
                 if (userCon != null)
                 {
@@ -98,6 +99,7 @@ namespace TripleA.Core.Features.Answers.Commands.Handler
                 }
 
                 return Created("");
+
             }
             else return BadRequest<string>();
         }

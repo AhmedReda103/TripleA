@@ -35,9 +35,11 @@ namespace TripleA.Core.Features.Question.Queries.Handler
         public QuestionQueryHandler(IMapper mapper,
                                     IQuestionService questionService,
                                     IAnswerService answerService,
+
                                     ICommentService commentService
 
                                     /*ICashingService cashingService*/)
+
 
         {
             this.mapper = mapper;
@@ -45,7 +47,9 @@ namespace TripleA.Core.Features.Question.Queries.Handler
             this.answerService = answerService;
             this.commentService = commentService;
 
+
             /*this.cashingService = cashingService;*/
+
         }
 
         public async Task<Response<GetQuestionByIdDto>> Handle(GetQuestionsByIdQuery request, CancellationToken cancellationToken)
