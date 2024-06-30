@@ -21,22 +21,30 @@ namespace TripleA.Service.implementations
             this.fileService = fileService;
             this.photoService = photoService;
         }
-        public async Task<string> AddAnswer(Answer answer, IFormFile file)
+        public async Task<string> AddAnswer(Answer answer, IFormFile? file = null)
         {
             //var fileUrl = await fileService.UploadFile("Answer", file);
 
-            var result = await photoService.AddPhotoAsync(file);
-
-
-            if (result.StatusCode == System.Net.HttpStatusCode.OK)
+            if (file != null)
             {
-                var fileUrl = result.Url.ToString();
-                answer.Image = fileUrl;
+                var result = await photoService.AddPhotoAsync(file);
+                if (result.StatusCode == System.Net.HttpStatusCode.OK)
+                {
+                    var fileUrl = result.Url.ToString();
+                    answer.Image = fileUrl;
+                }
+                else
+                {
+                    answer.Image = "NoFile";
+                }
+
             }
             else
             {
                 answer.Image = "NoFile";
             }
+
+
 
 
             await unitOfWork.Answers.AddAsync(answer);

@@ -23,7 +23,7 @@ namespace TripleA.Service.implementations
             _cloundinary = new Cloudinary(acc);
         }
 
-        public async Task<ImageUploadResult> AddPhotoAsync(IFormFile file)
+        public async Task<ImageUploadResult> AddPhotoAsync(IFormFile? file)
         {
             var uploadResult = new ImageUploadResult();
             if (file != null)
