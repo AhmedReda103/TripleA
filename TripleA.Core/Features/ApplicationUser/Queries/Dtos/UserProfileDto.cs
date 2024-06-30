@@ -12,7 +12,7 @@ namespace TripleA.Core.Features.ApplicationUser.Queries.Dtos
         public int Votes { get; set; }
         public string UserName { get; set; }
         
-        public List<UserProfileAnswersDto> UserProfiles { get; set; }
+        public List<UserProfileAnswersDto> UserProfileAnswers { get; set; }
     }
 
     

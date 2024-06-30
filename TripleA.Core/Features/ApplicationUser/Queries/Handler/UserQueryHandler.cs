@@ -19,12 +19,15 @@ namespace TripleA.Core.Features.ApplicationUser.Queries.Handler
     {
         private readonly IMapper mapper;
         private readonly IApplicationUserService applicationUserService;
+        private readonly IAnswerService answerService;
 
         public UserQueryHandler(IMapper mapper,
-                                IApplicationUserService applicationUserService)
+                                IApplicationUserService applicationUserService,
+                                IAnswerService answerService)
         {
             this.mapper = mapper;
             this.applicationUserService = applicationUserService;
+            this.answerService = answerService;
         }
         public async Task<Response<UserDto>> Handle(GetUserByIdQuery request, CancellationToken cancellationToken)
         {
@@ -36,6 +39,21 @@ namespace TripleA.Core.Features.ApplicationUser.Queries.Handler
                 var userMapper = mapper.Map<UserDto>(user);
                 return Success(userMapper);
             }              
+        }
+
+        public async Task<Response<UserProfileDto>> Handle(GetUserProfileByIdQuery request, CancellationToken cancellationToken)
+        {
+            var user = await applicationUserService.GetUserByIdAsync(request.UserId);
+            if (user == null)
+                return NotFound<UserProfileDto>();
+            var userProfileMapper = mapper.Map<UserProfileDto>(user);
+
+            var answers = await answerService.GetAnswersOfUser(user.Id);
+
+            userProfileMapper.UserProfileAnswers = mapper.Map<List<UserProfileAnswersDto>>(answers);
+
+            return Success(userProfileMapper);
+
         }
     }
 }
