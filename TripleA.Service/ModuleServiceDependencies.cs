@@ -26,6 +26,9 @@ namespace TripleA.Service
 
             services.AddScoped<IUserConService, UserConService>();
 
+            services.AddScoped<IAdvertisementsService, AdvertisementService>();
+
+
             //services.AddTransient<ICashingService, CashingService>();
 
 

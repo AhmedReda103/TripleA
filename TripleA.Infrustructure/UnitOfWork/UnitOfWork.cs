@@ -27,6 +27,8 @@ namespace TripleA.Infrustructure.unitOfWork
 
         public IUserConRepository userCons { get; }
 
+        public IAdvertisementRepository Advertisements { get; }
+
         public UnitOfWork(
             ApplicationDbContext context,
             UserManager<User> userManager,
@@ -43,6 +45,7 @@ namespace TripleA.Infrustructure.unitOfWork
             Comments = new CommentRepository(_context);
             Notifications = new NotificationRepository(_context);
             userCons = new UserConRepository(_context);
+            Advertisements = new AdvertisementRepository(_context);
 
         }
 
