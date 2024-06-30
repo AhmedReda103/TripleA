@@ -15,7 +15,9 @@ namespace TripleA.Core.mapping.Questions
                 .ForMember(des => des.Image, opt => opt.MapFrom(src => src.ImagePath));
 
 
-            CreateMap<Question, GetQuestionsListPaginatedResponse>();
+            CreateMap<Question, GetQuestionsListPaginatedResponse>()
+                 .ForMember(des => des.UserName, opt => opt.MapFrom(src => src.user.UserName));
+            ;
             CreateMap<Question, GetQuestionByTitlePaginatedResponse>()
                 .ForMember(des => des.UserName, opt => opt.MapFrom(src => src.user.UserName));
 
