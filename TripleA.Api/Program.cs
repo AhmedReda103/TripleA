@@ -1,5 +1,6 @@
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
+using Serilog;
 using TripleA.Core;
 using TripleA.Core.Middlewares;
 using TripleA.Data.Entities.Identity;
@@ -30,6 +31,18 @@ builder.Services.AddDbContext<ApplicationDbContext>(
 );
 
 builder.Services.Configure<CloudinarySettings>(builder.Configuration.GetSection("CloudinarySettings"));
+
+/*Serilog Configration*/
+
+var configSerilog = new ConfigurationBuilder()
+              .AddJsonFile("appsettings.json")
+              .Build();
+
+Log.Logger = new LoggerConfiguration()
+                .ReadFrom.Configuration(configSerilog)
+                .CreateLogger();
+
+builder.Services.AddSerilog();
 
 
 builder.Services.AddCors(corsOptions =>

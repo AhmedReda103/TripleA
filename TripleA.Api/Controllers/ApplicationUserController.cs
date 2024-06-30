@@ -1,5 +1,6 @@
 ﻿using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using Serilog;
 using TripleA.Api.Base;
 using TripleA.Core.Features.ApplicationUser.Commands.Models;
 using TripleA.Core.Features.ApplicationUser.Queries.Model;
@@ -21,6 +22,7 @@ namespace TripleA.Api.Controllers
         public async Task<IActionResult> SignIn([FromBody] SignInCommand command)
         {
             var response = await Mediator.Send(command);
+            Log.Information("Serilog Says Hello");
             return NewResult(response);
 
         }
