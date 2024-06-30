@@ -11,6 +11,7 @@ namespace TripleA.Core.mapping.ApplicationUser
         {
             CreateMap<AddUserCommand, TripleA.Data.Entities.Identity.User>();
             CreateMap<TripleA.Data.Entities.Identity.User, UserDto>();
+            CreateMap<TripleA.Data.Entities.Identity.User, UserProfileDto>();
         }
     }
 }

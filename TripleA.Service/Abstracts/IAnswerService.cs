@@ -16,5 +16,7 @@ namespace TripleA.Service.Abstracts
         Task<Answer> GetAnswerByIdAsync(int Id);
         public Task<string> EditAsync(Answer answer);
         IQueryable<Answer> getAnswersByQuestionIdPaginatedQuerable(int questionId);
+
+        Task<IEnumerable<Answer>> GetAnswersOfUser(string userId);
     }
 }
