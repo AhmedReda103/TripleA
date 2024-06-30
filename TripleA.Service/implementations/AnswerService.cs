@@ -13,21 +13,31 @@ namespace TripleA.Service.implementations
     {
         private readonly IUnitOfWork unitOfWork;
         private readonly IFileService fileService;
+        private readonly IPhotoService photoService;
 
-        public AnswerService(IUnitOfWork unitOfWork, IFileService fileService)
+        public AnswerService(IUnitOfWork unitOfWork, IFileService fileService, IPhotoService photoService)
         {
             this.unitOfWork = unitOfWork;
             this.fileService = fileService;
+            this.photoService = photoService;
         }
         public async Task<string> AddAnswer(Answer answer, IFormFile file)
         {
-            var fileUrl = await fileService.UploadFile("Answer", file);
-            switch (fileUrl)
+            //var fileUrl = await fileService.UploadFile("Answer", file);
+
+            var result = await photoService.AddPhotoAsync(file);
+
+
+            if (result.StatusCode == System.Net.HttpStatusCode.OK)
             {
-                case "NoFile": return "NoFile";
-                case "FailedToUploadFile": return "FailedToUploadFile";
+                var fileUrl = result.Url.ToString();
+                answer.Image = fileUrl;
             }
-            answer.Image = fileUrl;
+            else
+            {
+                answer.Image = "NoFile";
+            }
+
 
             await unitOfWork.Answers.AddAsync(answer);
             await unitOfWork.SaveChangesAsync();
@@ -110,6 +120,7 @@ namespace TripleA.Service.implementations
                                 Description = b.Description,
                                 Image = b.Image,
                                 CreatedIn = b.CreatedIn,
+                                Votes = b.Votes,
                                 UserId = b.UserId
 
 

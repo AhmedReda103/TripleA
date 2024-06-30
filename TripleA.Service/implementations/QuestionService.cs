@@ -12,19 +12,25 @@ namespace TripleA.Service.implementations
     {
         private readonly IUnitOfWork _unitOfWork;
         private readonly IFileService fileService;
+        private readonly IPhotoService photoService;
 
-        public QuestionService(IUnitOfWork unitOfWork, IFileService fileService)
+        public QuestionService(IUnitOfWork unitOfWork, IFileService fileService, IPhotoService photoService)
         {
 
             _unitOfWork = unitOfWork;
             this.fileService = fileService;
+            this.photoService = photoService;
         }
         public async Task<string> AddQuestion(Question question, IFormFile file)
         {
 
-            var fileUrl = await fileService.UploadFile("Question", file);
+            //var fileUrl = await fileService.UploadFile("Question", file);
 
-            fileService.SetQuestionFilePath(fileUrl, question);
+            // var fileUrl = await fileService.UploadFile("Question", file);
+
+            var result = await photoService.AddPhotoAsync(file);
+            fileService.SetQuestionFilePath(result.StatusCode, result.Url.ToString(), question);
+
 
             await _unitOfWork.Questions.AddAsync(question);
             await _unitOfWork.SaveChangesAsync();
