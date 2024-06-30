@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
 using TripleA.Api.Base;
 using TripleA.Core.Features.ApplicationUser.Commands.Models;
 using TripleA.Core.Features.ApplicationUser.Queries.Model;
@@ -39,6 +40,14 @@ namespace TripleA.Api.Controllers
         public async Task<IActionResult> Get(string id)
         {
             return NewResult(await Mediator.Send(new GetUserByIdQuery { UserId = id }));
+
+        }
+
+        [HttpGet("userprofile/{id}")]
+        [Authorize]
+        public async Task<IActionResult> GetProfile(string id)
+        {
+            return NewResult(await Mediator.Send(new GetUserProfileByIdQuery { UserId = id }));
 
         }
     }
