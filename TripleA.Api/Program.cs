@@ -1,6 +1,7 @@
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using TripleA.Core;
+using TripleA.Core.Middlewares;
 using TripleA.Data.Entities.Identity;
 using TripleA.Data.Helpers;
 using TripleA.Infrustructure;
@@ -70,6 +71,8 @@ app.UseHttpsRedirection();
 app.UseStaticFiles();
 
 app.UseRouting();
+
+app.UseMiddleware<ErrorHandlerMiddleware>();
 
 app.UseAuthentication();
 
