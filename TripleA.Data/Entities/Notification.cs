@@ -11,5 +11,7 @@ namespace TripleA.Data.Entities
         public string UserId { get; set; }
         public string Responder { get; set; }
         public DateTime? CreatedIn { get; set; }
+
+        public int QuestionId { get; set; }
     }
 }
