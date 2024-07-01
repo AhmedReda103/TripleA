@@ -19,14 +19,17 @@ namespace TripleA.Core.mapping.Answers
             CreateMap<EditAnswerCommand, Answer>()
                 .ForMember(des => des.Image, opt => opt.MapFrom(src => src.ImagePath));
 
-            CreateMap <Answer, AnswerDtoForQuestionById>();
+            CreateMap<Answer, AnswerDtoForQuestionById>();
 
             CreateMap<Answer, UserProfileAnswersDto>()
            .ForMember(dest => dest.answerId, opt => opt.MapFrom(src => src.Id))
            .ForMember(dest => dest.questionId, opt => opt.MapFrom(src => src.QuestionId))
            .ForMember(dest => dest.votes, opt => opt.MapFrom(src => src.Votes))
            .ForMember(dest => dest.questionTitle, opt => opt.MapFrom(src => src.Question.Title))
-           .ForMember(dest => dest.answerContent, opt => opt.MapFrom(src => src.Description));  
+           .ForMember(dest => dest.answerContent, opt => opt.MapFrom(src => src.Description));
+
+            CreateMap<Answer, GetAnswerListDto>()
+                    .ForMember(des => des.QuestionId, opt => opt.MapFrom(src => src.Question.Id));
         }
     }
 }

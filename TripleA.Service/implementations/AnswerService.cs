@@ -1,11 +1,7 @@
-
-using Azure.Core;
 using Microsoft.AspNetCore.Http;
 using Microsoft.IdentityModel.Tokens;
 using System.Diagnostics;
-using System.Threading;
 using TripleA.Data.Entities;
-using TripleA.Infrustructure.Repositories;
 using TripleA.Infrustructure.unitOfWork;
 using TripleA.Service.Abstracts;
 
@@ -141,10 +137,16 @@ namespace TripleA.Service.implementations
             return Enumerable.Empty<Answer>().AsQueryable();
         }
 
-        public async Task<IEnumerable<Answer>> GetAnswersOfUser (string userId)
+        public async Task<IEnumerable<Answer>> GetAnswersOfUser(string userId)
         {
             return await unitOfWork.Answers.FindAllAsync(a => a.UserId == userId);
-                              
+
+        }
+
+        public async Task<List<Answer>> GetAnswersListAsync()
+        {
+            var result = await unitOfWork.Answers.GetAllAsync();
+            return result.ToList();
         }
     }
 }

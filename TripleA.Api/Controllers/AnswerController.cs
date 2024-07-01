@@ -60,5 +60,15 @@ namespace TripleA.Api.Controllers
             return NewResult(response);
         }
 
+
+        [HttpGet]
+        //  [Authorize]
+        public async Task<IActionResult> GetAnswerList()
+        {
+            var response = await Mediator.Send(new GetAnswerListQuery());
+            return NewResult(response);
+        }
+
+
     }
 }
