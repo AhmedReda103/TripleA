@@ -1,6 +1,7 @@
 ﻿
 using Microsoft.AspNetCore.Http;
 using Microsoft.IdentityModel.Tokens;
+using System.Diagnostics;
 using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
 using System.Text;
@@ -159,6 +160,28 @@ namespace TripleA.Service.implementations
         {
             return await unitOfWork.Users.GetByIdAsync(userId);
 
+        }
+
+        public async Task<string> DeleteUserAsync(User user)
+        {
+            var trans = unitOfWork.Users.BeginTransaction();
+            try
+            {
+                unitOfWork.Users.Delete(user);
+                var questions = await unitOfWork.Questions.GetAllAsync();
+                var userQuestions = questions.Where(q => q.UserId == user.Id);
+                unitOfWork.Questions.DeleteRange(userQuestions);
+
+                await unitOfWork.SaveChangesAsync();
+                await trans.CommitAsync();
+                return "Success";
+            }
+            catch (Exception ex)
+            {
+                await trans.RollbackAsync();
+                Debug.WriteLine(ex.Message);
+                return "Falied";
+            }
         }
     }
 }
