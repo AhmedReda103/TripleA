@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
 using TripleA.Api.Base;
 using TripleA.Core.Features.advertisement.Commands.Models;
 using TripleA.Core.Features.advertisement.Queries.Models;
@@ -20,5 +21,14 @@ namespace TripleA.Api.Controllers
         {
             return NewResult(await Mediator.Send(command));
         }
+
+        [HttpDelete("/DeleteAdvertisement")]
+        [Authorize]
+        public async Task<IActionResult> Delete(int id)
+        {
+            return NewResult(await Mediator.Send(new DeleteAdvertisementCommand(id)));
+        }
+
+
     }
 }
