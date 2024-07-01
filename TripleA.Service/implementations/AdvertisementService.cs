@@ -1,4 +1,5 @@
 ﻿using Microsoft.AspNetCore.Http;
+using System.Diagnostics;
 using TripleA.Data.Entities;
 using TripleA.Infrustructure.unitOfWork;
 using TripleA.Service.Abstracts;
@@ -42,6 +43,29 @@ namespace TripleA.Service.implementations
             await unitOfWork.Advertisements.AddAsync(advertisement);
             await unitOfWork.SaveChangesAsync();
             return "Added";
+        }
+
+        public async Task<string> DeleteAdvertisementAsync(Advertisement advertisement)
+        {
+            var trans = unitOfWork.Advertisements.BeginTransaction();
+            try
+            {
+                unitOfWork.Advertisements.Delete(advertisement);
+                await unitOfWork.SaveChangesAsync();
+                await trans.CommitAsync();
+                return "Success";
+            }
+            catch (Exception ex)
+            {
+                await trans.RollbackAsync();
+                Debug.WriteLine(ex.Message);
+                return "Falied";
+            }
+        }
+
+        public async Task<Advertisement> GetAdvertisementByIdAsync(int id)
+        {
+            return await unitOfWork.Advertisements.GetByIdAsync(id);
         }
 
         public async Task<List<Advertisement>> GetAdvertisementListAsync()

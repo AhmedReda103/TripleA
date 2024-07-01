@@ -7,5 +7,7 @@ namespace TripleA.Service.Abstracts
     {
         public Task<string> AddAdvertisements(Advertisement advertisement, IFormFile? file = null);
         public Task<List<Advertisement>> GetAdvertisementListAsync();
+        public Task<Advertisement> GetAdvertisementByIdAsync(int id);
+        public Task<string> DeleteAdvertisementAsync(Advertisement advertisement);
     }
 }

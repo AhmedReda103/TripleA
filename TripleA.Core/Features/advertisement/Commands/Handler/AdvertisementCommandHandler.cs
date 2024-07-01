@@ -7,7 +7,8 @@ using TripleA.Service.Abstracts;
 namespace TripleA.Core.Features.advertisement.Commands.Handler
 {
     public class AdvertisementCommandHandler : ResponseHandler,
-                                        IRequestHandler<AddAdvertisementCommand, Response<string>>
+                                        IRequestHandler<AddAdvertisementCommand, Response<string>>,
+                                        IRequestHandler<DeleteAdvertisementCommand, Response<string>>
     {
 
         private readonly IMapper mapper;
@@ -48,6 +49,14 @@ namespace TripleA.Core.Features.advertisement.Commands.Handler
             return BadRequest<string>();
         }
 
+        public async Task<Response<string>> Handle(DeleteAdvertisementCommand request, CancellationToken cancellationToken)
+        {
+            var advertisement = await advertisementService.GetAdvertisementByIdAsync(request.Id);
+            if (advertisement == null) return NotFound<string>("advertisement is Not Found");
 
+            var result = await advertisementService.DeleteAdvertisementAsync(advertisement);
+            if (result == "Success") return Deleted<string>($"Delete Successfully {request.Id}");
+            else return BadRequest<string>();
+        }
     }
 }
