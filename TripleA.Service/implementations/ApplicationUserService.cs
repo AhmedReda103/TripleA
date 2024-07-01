@@ -183,5 +183,11 @@ namespace TripleA.Service.implementations
                 return "Falied";
             }
         }
+
+        public async Task<List<User>> GetUsersListAsync()
+        {
+            var result = await unitOfWork.Users.GetAllAsync();
+            return result.ToList();
+        }
     }
 }

@@ -59,5 +59,14 @@ namespace TripleA.Api.Controllers
             return NewResult(await Mediator.Send(new DeleteUserCommand(id)));
         }
 
+        [HttpGet("/GetUserList")]
+        //  [Authorize]
+        public async Task<IActionResult> GetUserList()
+        {
+            var response = await Mediator.Send(new GetUserListQuery());
+            Console.WriteLine(response);
+            return NewResult(response);
+        }
+
     }
 }
