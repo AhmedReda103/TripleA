@@ -18,6 +18,8 @@
             public const string Edit = Prefix + "/Edit";
             public const string Delete = Prefix + "/{id}";
             public const string ChangePassword = Prefix + "/Change-Password";
+            public const string GetUserList = Prefix + "/GetUserList";
+
         }
 
 
@@ -31,6 +33,7 @@
             public const string SendResetPasswordCode = Prefix + "/SendResetPasswordCode";
             public const string ConfirmResetPasswordCode = Prefix + "/ConfirmResetPasswordCode";
             public const string ResetPassword = Prefix + "/ResetPassword";
+            public const string GetUserList = Prefix + "/GetUserList";
 
         }
     }

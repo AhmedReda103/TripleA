@@ -16,5 +16,6 @@ namespace TripleA.Service.Abstracts
         Task DownUser(string userId);
 
         Task<User> GetUserByIdAsync(string userId);
+        Task<List<User>> GetUsersListAsync();
     }
 }

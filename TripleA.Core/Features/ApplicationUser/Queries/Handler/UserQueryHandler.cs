@@ -1,21 +1,16 @@
 ﻿using AutoMapper;
 using MediatR;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using TripleA.Core.Bases;
 using TripleA.Core.Features.ApplicationUser.Queries.Dtos;
 using TripleA.Core.Features.ApplicationUser.Queries.Model;
-using TripleA.Data.Entities.Identity;
 using TripleA.Service.Abstracts;
 
 namespace TripleA.Core.Features.ApplicationUser.Queries.Handler
 {
     public class UserQueryHandler : ResponseHandler,
                                     IRequestHandler<GetUserByIdQuery, Response<UserDto>>,
-                                    IRequestHandler<GetUserProfileByIdQuery, Response<UserProfileDto>>
+                                    IRequestHandler<GetUserProfileByIdQuery, Response<UserProfileDto>>,
+                                     IRequestHandler<GetUserListQuery, Response<List<GetUserListDto>>>
     {
         private readonly IMapper mapper;
         private readonly IApplicationUserService applicationUserService;
@@ -41,7 +36,7 @@ namespace TripleA.Core.Features.ApplicationUser.Queries.Handler
             {
                 var userMapper = mapper.Map<UserDto>(user);
                 return Success(userMapper);
-            }              
+            }
         }
 
         public async Task<Response<UserProfileDto>> Handle(GetUserProfileByIdQuery request, CancellationToken cancellationToken)
@@ -60,6 +55,14 @@ namespace TripleA.Core.Features.ApplicationUser.Queries.Handler
 
             return Success(userProfileMapper);
 
+        }
+
+        public async Task<Response<List<GetUserListDto>>> Handle(GetUserListQuery request, CancellationToken cancellationToken)
+        {
+            var userList = await applicationUserService.GetUsersListAsync();
+            var userMapper = mapper.Map<List<GetUserListDto>>(userList);
+            var result = Success(userMapper);
+            return result;
         }
     }
 }
