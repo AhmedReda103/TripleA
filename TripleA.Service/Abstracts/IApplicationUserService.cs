@@ -9,8 +9,9 @@ namespace TripleA.Service.Abstracts
         Task<JwtAuthResult> GetJWTToken(User user);
         Task<string> getUserIdAsync();
         Task upUser(string userId);
+        public Task<string> DeleteUserAsync(User user);
 
-       // Task<User> getUserByIdAsync(string userId);
+        // Task<User> getUserByIdAsync(string userId);
 
         Task DownUser(string userId);
 

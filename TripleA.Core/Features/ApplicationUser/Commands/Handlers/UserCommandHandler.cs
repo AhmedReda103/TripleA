@@ -13,6 +13,7 @@ namespace TripleA.Core.Features.ApplicationUser.Commands.Handlers
     public class UserCommandHandler : ResponseHandler, IRequestHandler<AddUserCommand, Response<string>>
         , IRequestHandler<SignInCommand, Response<JwtAuthResult>>
         , IRequestHandler<LogoutCommand, Response<string>>
+        , IRequestHandler<DeleteUserCommand, Response<string>>
     {
 
         private readonly IMapper _mapper;
@@ -85,5 +86,15 @@ namespace TripleA.Core.Features.ApplicationUser.Commands.Handlers
             return Success("Successfully logged out");
         }
 
+        public async Task<Response<string>> Handle(DeleteUserCommand request, CancellationToken cancellationToken)
+        {
+            var user = await _applicationUserService.GetUserByIdAsync(request.Id);
+
+            if (user == null) return NotFound<string>("user is Not Found");
+
+            var result = await _applicationUserService.DeleteUserAsync(user);
+            if (result == "Success") return Deleted<string>($"Delete Successfully {request.Id}");
+            else return BadRequest<string>();
+        }
     }
 }

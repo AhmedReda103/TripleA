@@ -52,5 +52,12 @@ namespace TripleA.Api.Controllers
             return NewResult(await Mediator.Send(new GetUserProfileByIdQuery { UserId = id }));
 
         }
+
+        [HttpDelete("/DeleteUser")]
+        public async Task<IActionResult> Delete(string id)
+        {
+            return NewResult(await Mediator.Send(new DeleteUserCommand(id)));
+        }
+
     }
 }
