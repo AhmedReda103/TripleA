@@ -85,7 +85,8 @@ namespace TripleA.Core.Features.Answers.Commands.Handler
                     CreatedIn = DateTime.Now,
                     Message = SharedResourcesKeys.notificationMessage + $" : {AnswerMapper.Description}",
                     UserId = AskerId,
-                    Responder = ResponderName
+                    Responder = ResponderName,
+                    QuestionId=request.QuestionId
 
                 };
 
