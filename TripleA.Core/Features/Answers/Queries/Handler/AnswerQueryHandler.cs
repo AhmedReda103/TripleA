@@ -8,7 +8,10 @@ using TripleA.Service.Abstracts;
 namespace TripleA.Core.Features.Answers.Queries.Handler
 {
     public class AnswerQueryHandler : ResponseHandler,
-                                       IRequestHandler<GetAnswerByIdQuery, Response<GetAnswerByIdDto>>
+                                       IRequestHandler<GetAnswerByIdQuery, Response<GetAnswerByIdDto>>,
+                                    IRequestHandler<GetAnswerListQuery, Response<List<GetAnswerListDto>>>
+
+
     {
         private readonly IMapper mapper;
         private readonly IAnswerService answerService;
@@ -26,5 +29,15 @@ namespace TripleA.Core.Features.Answers.Queries.Handler
             var result = Success(answerMapper);
             return result;
         }
+
+        public async Task<Response<List<GetAnswerListDto>>> Handle(GetAnswerListQuery request, CancellationToken cancellationToken)
+        {
+            var answerList = await answerService.GetAnswersListAsync();
+            var answerMapper = mapper.Map<List<GetAnswerListDto>>(answerList);
+            var result = Success(answerMapper);
+            return result;
+        }
+
+
     }
 }
